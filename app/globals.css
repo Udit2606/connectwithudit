@@ -479,9 +479,9 @@
   /* Transition back to 0 rather than to `none`, which is not animatable.
      The attribute is dropped afterwards so no compositing layer lingers. */
   transition:
-    filter 900ms var(--ease-in-out-quint),
-    transform 1400ms var(--ease-in-out-quint),
-    opacity 900ms var(--ease-in-out-quint);
+    filter 1200ms var(--ease-in-out-quint),
+    transform 1800ms var(--ease-in-out-quint),
+    opacity 1200ms var(--ease-in-out-quint);
 }
 
 [data-stage="blurred"] {

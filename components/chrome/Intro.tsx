@@ -11,8 +11,14 @@ import {
   type ReactNode,
 } from "react";
 
-import { ARRIVAL_LINE, HOLD_MS, LAND_MS, TYPE_MS } from "@/data/intro";
-import { EASE_IN_OUT_QUINT } from "@/lib/animations/variants";
+import {
+  ARRIVAL_LINE,
+  arrivalSchedule,
+  HOLD_MS,
+  LAND_MS,
+  TYPE_TOTAL_MS,
+} from "@/data/intro";
+import { EASE_IN_OUT_QUINT, EASE_OUT_EXPO } from "@/lib/animations/variants";
 import { usePrefersReducedMotion } from "@/lib/hooks/usePrefersReducedMotion";
 import { useSmoothScroll } from "./SmoothScroll";
 
@@ -86,14 +92,18 @@ export function IntroProvider({ children }: { children: ReactNode }) {
     window.scrollTo(0, 0);
     stop();
 
-    const total = ARRIVAL_LINE.length;
-    // One timer per character rather than an interval: the timers array is
-    // already the cancellation mechanism for skipping, and a dropped frame
-    // then shortens a single gap instead of dragging the whole line late.
-    for (let i = 1; i <= total; i++) {
-      timers.current.push(setTimeout(() => setTyped(i), TYPE_MS * i));
-    }
-    timers.current.push(setTimeout(finish, TYPE_MS * total + HOLD_MS));
+    /*
+     * One timer per character, at the times the schedule gives rather than
+     * on a fixed interval. The timers array is already the cancellation
+     * mechanism for skipping, and scheduling each keystroke against the
+     * start means a dropped frame shortens one gap instead of dragging the
+     * whole line late — which an interval would do.
+     */
+    const schedule = arrivalSchedule(ARRIVAL_LINE);
+    schedule.forEach((at, i) => {
+      timers.current.push(setTimeout(() => setTyped(i + 1), at));
+    });
+    timers.current.push(setTimeout(finish, TYPE_TOTAL_MS + HOLD_MS));
 
     return () => {
       timers.current.forEach(clearTimeout);
@@ -143,8 +153,11 @@ export function IntroProvider({ children }: { children: ReactNode }) {
           <motion.div
             key="intro"
             className="fixed inset-0 z-[95] grid cursor-pointer place-items-center gut"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            initial={{ opacity: 0, scale: 1 }}
+            /* A very slow push-in over the whole sequence. Fifteen
+               thousandths of scale — not visible as movement, only as the
+               shot not being locked off. */
+            animate={{ opacity: 1, scale: 1.015 }}
             exit={{
               // The landing: the overlay drifts toward the viewer and lets go
               // as the page comes up to meet it.
@@ -153,7 +166,10 @@ export function IntroProvider({ children }: { children: ReactNode }) {
               filter: "blur(10px)",
               transition: { duration: LAND_MS / 1000, ease: EASE_IN_OUT_QUINT },
             }}
-            transition={{ duration: 0.45 }}
+            transition={{
+              opacity: { duration: 0.75 },
+              scale: { duration: (TYPE_TOTAL_MS + HOLD_MS) / 1000, ease: "linear" },
+            }}
             onClick={finish}
             role="status"
             aria-live="polite"
@@ -203,7 +219,7 @@ export function IntroProvider({ children }: { children: ReactNode }) {
               animate={{
                 width: `${(typed / ARRIVAL_LINE.length) * 34 + 4}vw`,
               }}
-              transition={{ duration: 0.4, ease: "linear" }}
+              transition={{ duration: 0.55, ease: EASE_OUT_EXPO }}
             />
           </motion.div>
         ) : null}
