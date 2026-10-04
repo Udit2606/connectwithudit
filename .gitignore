@@ -11,3 +11,6 @@ tsconfig.tsbuildinfo
 next-env.d.ts
 .next-prod
 .next-preview
+
+# Editor and agent tooling, not project source.
+.claude
