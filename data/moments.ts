@@ -79,6 +79,15 @@ export const moments: Moment[] = [
     span: "tall",
   },
   {
+    /* The same bird, the same mast, pulled back. Deliberately next to the
+       frame above and captioned as a second look rather than left to read
+       as a duplicate. */
+    src: "/moments/bird-on-mast-wide.webp",
+    alt: "The same bird on the same floodlight mast, framed wider, with the guy-wires running out to both edges.",
+    caption: "Then again, wider, for the wires",
+    span: "wide",
+  },
+  {
     src: "/moments/india-gate.webp",
     alt: "India Gate lit warm against a bank of dark storm cloud, with crowds gathered along the base.",
     caption: "Stone still warm, sky about to break",
@@ -148,11 +157,6 @@ export const moments: Moment[] = [
     alt: "A lit paper sky lantern rising between buildings strung with blue fairy lights.",
     caption: "It got about three floors up",
     span: "tall",
-  },
-  {
-    src: "/moments/rose.webp",
-    alt: "A single pink rose in full bloom against dark green foliage.",
-    caption: "Still the easiest subject there is",
   },
   {
     src: "/moments/cat.webp",
