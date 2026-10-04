@@ -17,7 +17,12 @@ import { cn } from "@/lib/utils/cn";
  * record rather than a word cloud.
  */
 export function Systems() {
-  const [open, setOpen] = useState(layers[2].id);
+  /* All closed on arrival. Services used to be open by default, which made
+     the section land as one expanded panel with four collapsed rows under
+     it — and the lede asks you to open one, so having one already open
+     answered the invitation before it was made. "" is the closed state the
+     toggle already uses. */
+  const [open, setOpen] = useState("");
 
   return (
     <section
