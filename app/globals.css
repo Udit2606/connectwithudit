@@ -529,7 +529,12 @@
   --stage-brightness: 0.5;
 }
 
-:root[data-theme="light"] {
+/* Light is the default, so this has to match an absent attribute too: the
+   dark values are the ones `@theme` writes onto `:root`, and without this a
+   visitor with JavaScript disabled — nothing to run the bootstrap — would
+   get the dark substrate instead of the default one. */
+:root[data-theme="light"],
+:root:not([data-theme="dark"]) {
   color-scheme: light;
 
   /* --- Substrate: warm paper, each step *lighter* as it raises ---------- */

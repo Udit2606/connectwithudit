@@ -27,15 +27,14 @@ const BAR_COLOR: Record<Theme, string> = {
  * an attribute on <html> before hydration, and a theme applied after
  * hydration means every light-mode visitor gets a black flash first.
  *
- * Dark is the default rather than `prefers-color-scheme`. The substrate is
- * the art direction here, not a preference — and since most desktops report
- * "light" by default, honouring the media query would mean most first-time
- * visitors never see the site as it was designed. An explicit choice is
- * remembered for next time.
+ * Light is the default. It is not read from `prefers-color-scheme` either:
+ * a fixed default means the first paint is deterministic, and the choice a
+ * visitor actually makes is remembered for next time. Dark is one click
+ * away in the nav and persists in localStorage once chosen.
  */
 export const THEME_BOOTSTRAP = `(function(){try{var t=localStorage.getItem(${JSON.stringify(
   STORAGE_KEY,
-)});if(t!=="light"&&t!=="dark")t="dark";document.documentElement.setAttribute("data-theme",t)}catch(e){document.documentElement.setAttribute("data-theme","dark")}})()`;
+)});if(t!=="light"&&t!=="dark")t="light";document.documentElement.setAttribute("data-theme",t)}catch(e){document.documentElement.setAttribute("data-theme","light")}})()`;
 
 type ThemeApi = {
   theme: Theme;
@@ -61,12 +60,12 @@ type ViewTransitionDocument = Document & {
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   /*
-   * Initialised to "dark" to match what the server rendered, then corrected
+   * Initialised to the default to match what the server rendered, then corrected
    * from the DOM on mount. The bootstrap script has already put the real
    * value on <html>, so nothing visual depends on this state settling — it
    * only exists so the toggle and the 3D layer know which way round we are.
    */
-  const [theme, setThemeState] = useState<Theme>("dark");
+  const [theme, setThemeState] = useState<Theme>("light");
 
   useEffect(() => {
     const attr = document.documentElement.getAttribute("data-theme");

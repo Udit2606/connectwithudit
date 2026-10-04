@@ -87,9 +87,9 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   /* A single tag, rewritten by ThemeProvider when the substrate changes.
      The media-query form would emit two, and then there is no one tag to
-     keep in step with an explicit choice. */
-  themeColor: "#09090b",
-  colorScheme: "dark light",
+     keep in step with an explicit choice. This is the default substrate. */
+  themeColor: "#f5f2ec",
+  colorScheme: "light dark",
   width: "device-width",
   initialScale: 1,
 };
