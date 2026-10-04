@@ -34,7 +34,11 @@ export const nav = [
   { label: "Story", href: "#story", id: "story" },
   { label: "Systems", href: "#systems", id: "systems" },
   { label: "Experience", href: "#experience", id: "experience" },
-  { label: "Experiments", href: "#experiments", id: "experiments" },
+  { label: "Beyond", href: "#human", id: "human" },
+  /* "Lab", not "Experiments". Shorter — seven labels is as many as the pill
+     fits at 1024px — and it stops sitting next to "Experience" looking like
+     a typo of it. */
+  { label: "Lab", href: "#experiments", id: "experiments" },
   { label: "Contact", href: "#contact", id: "contact" },
 ] as const;
 
@@ -46,7 +50,7 @@ export const sections = [
   { id: "work", index: "04", label: "Selected Work" },
   { id: "systems", index: "05", label: "Under the Surface" },
   { id: "experience", index: "06", label: "Experience" },
-  { id: "experiments", index: "07", label: "Lab" },
-  { id: "human", index: "08", label: "Off the Clock" },
+  { id: "human", index: "07", label: "Beyond Engineering" },
+  { id: "experiments", index: "08", label: "Lab" },
   { id: "contact", index: "09", label: "Contact" },
 ] as const;

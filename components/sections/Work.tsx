@@ -180,6 +180,24 @@ export function Work() {
           <ProjectRow key={project.slug} project={project} i={i} />
         ))}
       </div>
+
+      {/* Three here, the rest one click away. The homepage argues for the
+          strongest work; the index lists everything. */}
+      <div
+        data-rise="up"
+        className="flex flex-wrap items-baseline justify-between gap-6 border-t border-line pt-10"
+      >
+        <p className="max-w-[36ch] text-[1rem] leading-[1.6] text-ash">
+          There are more — smaller builds, and the repositories behind them.
+        </p>
+        <Link
+          href="/work"
+          data-cursor="Explore"
+          className="label border-b border-line-strong pb-1.5 text-bone transition-colors hover:border-amber hover:text-amber"
+        >
+          Show all projects →
+        </Link>
+      </div>
     </section>
   );
 }

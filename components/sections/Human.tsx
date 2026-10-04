@@ -13,11 +13,11 @@ export function Human() {
   return (
     <section
       id="human"
-      aria-label="Leadership and education"
+      aria-label="Beyond engineering"
       className="relative py-[clamp(5rem,12vh,9rem)] gut"
     >
       <SectionHeader
-        index="08"
+        index="07"
         label={humanIntro.kicker}
         title={["Engineering is a team sport", "before it's a technical one."]}
         lede={humanIntro.note}

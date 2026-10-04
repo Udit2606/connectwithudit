@@ -423,3 +423,77 @@ export const getProject = (slug: string) =>
   projects.find((p) => p.slug === slug);
 
 export const projectSlugs = projects.map((p) => p.slug);
+
+/* ==========================================================================
+   OTHER PROJECTS
+   The three above are case studies: resume-backed, with a bespoke diagram
+   each. These are the rest — repositories, described from what their own
+   READMEs actually say and nothing else. No metric appears here that the
+   repository does not state itself, which is why some of them carry fewer
+   numbers than you might expect.
+   ========================================================================== */
+
+export type SideProject = {
+  name: string;
+  /** What category it sits in. */
+  kicker: string;
+  /** Two sentences at most. These are listed, not argued. */
+  summary: string;
+  /** Free text rather than a union: "Runs locally" is a real state. */
+  status: string;
+  stack: string[];
+  repo: string;
+  live?: string;
+  /** One verifiable fact the repository states about itself. Optional. */
+  note?: string;
+};
+
+export const sideProjects: SideProject[] = [
+  {
+    name: "Social Media Content Analyzer",
+    kicker: "Document AI",
+    summary:
+      "Upload a PDF or an image of a post and get an engagement score, a structured critique and a platform-tailored rewrite. The AI critique sits beside deterministic text metrics computed independently, so the numbers can be checked without trusting the model.",
+    status: "Deployed",
+    stack: [
+      "Next.js 16",
+      "React 19",
+      "FastAPI",
+      "Python",
+      "PyMuPDF",
+      "Tesseract OCR",
+      "Pydantic",
+    ],
+    repo: "https://github.com/Udit2606/social-media-content-analyzer",
+    live: "https://thepostpilotai.vercel.app",
+    note: "265 backend tests · OCR fallback on scanned PDFs",
+  },
+  {
+    name: "Real-Time Market Data Pipeline",
+    kicker: "Streaming systems",
+    summary:
+      "Live trades off a Finnhub WebSocket into Kafka, then analytics and alerting workers reading the same stream independently. Rolling-window indicators land in TimescaleDB, snapshots cache in Redis, and a FastAPI gateway relays both to a React dashboard.",
+    status: "Runs locally",
+    stack: [
+      "Python 3.12",
+      "Apache Kafka",
+      "TimescaleDB",
+      "Redis",
+      "FastAPI",
+      "React",
+      "Docker Compose",
+    ],
+    repo: "https://github.com/Udit2606/real-time-market-data-pipeline",
+    note: "Seven stages, each a separate consumer",
+  },
+  {
+    name: "Mittal Jewellers",
+    kicker: "Commerce front-end",
+    summary:
+      "A jewellery storefront: catalogue, cart that survives a refresh, accounts, and a dark mode built on CSS variables. Front-end only — state lives in React context and local storage rather than a backend.",
+    status: "Deployed",
+    stack: ["Next.js 14", "TypeScript", "Tailwind CSS", "shadcn/ui"],
+    repo: "https://github.com/Udit2606/e-commece-platform",
+    live: "https://e-commece-platform.vercel.app",
+  },
+];

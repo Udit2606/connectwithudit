@@ -11,7 +11,7 @@ export type Role = {
 };
 
 export const humanIntro = {
-  kicker: "Off the clock",
+  kicker: "Beyond engineering",
   title: "Engineering is a team sport before it is a technical one.",
   note: "Where I learned to stand in front of a room, run something that has to work on the day, and be accountable to people rather than a test suite.",
 };

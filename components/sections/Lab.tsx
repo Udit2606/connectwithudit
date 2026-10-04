@@ -31,7 +31,7 @@ export function Lab() {
       <div className="gut">
         <div className="flex flex-col gap-8 py-[clamp(3rem,8vh,5rem)] lg:flex-row lg:items-end lg:justify-between">
           <div className="flex items-baseline gap-4">
-            <span className="label text-amber">07</span>
+            <span className="label text-amber">08</span>
             <MaskText
               as="h2"
               lines={["Things I built because", "I wanted to know if I could."]}
@@ -48,12 +48,12 @@ export function Lab() {
         </div>
 
         {/* Deliberately uneven: a masonry-ish rhythm, not a tidy grid */}
-        <ul className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="grid gap-x-8 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
           {experiments.map((exp, i) => (
             <li
               key={exp.index}
               data-rise="up"
-              className="group relative flex flex-col gap-4 border-t border-line pt-6"
+              className="group relative flex flex-col gap-3.5 border-t border-line pt-5"
               style={{
                 ...riseDelay(i % 3),
                 // Nudge the middle column down for an uneven, less templated grid.
@@ -74,9 +74,11 @@ export function Lab() {
                 {exp.title}
               </h3>
 
-              <p className="text-[0.9375rem] leading-[1.65] text-ash">{exp.body}</p>
+              <p className="max-w-[34ch] text-[0.9375rem] leading-[1.6] text-ash">
+                {exp.body}
+              </p>
 
-              <ul className="mt-auto flex flex-wrap gap-x-2 gap-y-2 pt-2">
+              <ul className="mt-auto flex flex-wrap gap-2 pt-1">
                 {exp.tags.map((tag) => (
                   <li
                     key={tag}

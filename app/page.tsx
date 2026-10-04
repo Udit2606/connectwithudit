@@ -23,8 +23,11 @@ export default function HomePage() {
       <Work />
       <Systems />
       <ExperienceSection />
-      <Lab />
+      {/* Beyond engineering sits before the Lab on purpose: the team-sport
+          claim reads as context for the solo experiments, not as an
+          afterthought once they are done. */}
       <Human />
+      <Lab />
       <Contact />
       <Footer />
     </>
