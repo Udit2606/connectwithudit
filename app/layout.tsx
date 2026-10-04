@@ -4,6 +4,7 @@ import {
   Instrument_Serif,
   Schibsted_Grotesk,
 } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import { IntroProvider } from "@/components/chrome/Intro";
 import { Cursor } from "@/components/chrome/Cursor";
@@ -155,6 +156,7 @@ export default function RootLayout({
 
         <RevealDriver />
         <Cursor />
+        <SpeedInsights />
 
         <script
           type="application/ld+json"
