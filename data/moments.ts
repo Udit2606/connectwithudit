@@ -34,9 +34,13 @@ export const momentsIntro = {
 };
 
 /**
- * Thirteen photographs, ordered for the rhythm of the grid rather than
- * chronologically — a landscape to open, then an alternating run of tall and
- * square frames so no two of the same shape sit side by side.
+ * Twenty-two photographs, ordered best first.
+ *
+ * This is a ranking, not a chronology. A photography page is an edit — the
+ * frames that earn the top of it are the ones that are hard to take or hard
+ * to look away from, and the ones further down are good without being that.
+ * The order is also doing layout work: a landscape opens, and no two frames
+ * of the same shape sit side by side.
  *
  * `place` and `year` are left off every entry on purpose. The captions
  * describe what is in the frame, which is something the photograph can be
@@ -46,27 +50,57 @@ export const momentsIntro = {
  */
 export const moments: Moment[] = [
   {
+    src: "/moments/sunburst-skyline.webp",
+    alt: "The sun breaking through a gap in heavy cloud over a city skyline, with visible shafts of light falling across the rooftops.",
+    caption: "The cloud opened for about a minute",
+    span: "wide",
+  },
+  {
+    src: "/moments/lightning-storm.webp",
+    alt: "A long fork of lightning branching across a violet night sky above a lit street of shops and a wet road.",
+    caption: "Thirty frames to catch one of these",
+    span: "tall",
+  },
+  {
+    src: "/moments/sea-at-sunset.webp",
+    alt: "A calm sea under a graduated orange and grey sky at sunset, with a single small boat on the horizon.",
+    caption: "One boat, and everything else is sky",
+    span: "tall",
+  },
+  {
+    src: "/moments/diyas.webp",
+    alt: "Lit clay diyas arranged on a steel plate, each flame reflected in the metal.",
+    caption: "Lit, and then nobody wanted to move them",
+  },
+  {
+    src: "/moments/bird-on-mast.webp",
+    alt: "A bird of prey perched on top of a floodlight mast, silhouetted against a hazy orange sky.",
+    caption: "It sat there long enough to be framed properly",
+    span: "tall",
+  },
+  {
+    src: "/moments/india-gate.webp",
+    alt: "India Gate lit warm against a bank of dark storm cloud, with crowds gathered along the base.",
+    caption: "Stone still warm, sky about to break",
+    span: "tall",
+  },
+  {
     src: "/moments/light-through-trees.webp",
     alt: "Shafts of morning sunlight breaking through a dense canopy onto a road, with figures walking through the haze below.",
     caption: "The morning the light came through in columns",
     span: "wide",
   },
   {
-    src: "/moments/lightning.webp",
-    alt: "A fork of lightning across a violet storm sky above a lit apartment block.",
-    caption: "One frame, and the sky went purple",
+    src: "/moments/courtyard-night.webp",
+    alt: "A colonial-style courtyard at night: arched windows, a canvas parasol, potted palms and a single hanging bulb.",
+    caption: "Empty by the time I sat down",
     span: "tall",
   },
   {
-    src: "/moments/morning-campus.webp",
-    alt: "Low morning sun filtering through trees onto a lawn in front of a white building with striped awnings.",
-    caption: "Eight in the morning, nobody out yet",
-  },
-  {
-    src: "/moments/ridgeline-sunset.webp",
-    alt: "The sun low in a hazy orange sky over a long ridgeline of hills, with dark treetops in the foreground.",
-    caption: "Hills going flat and blue behind the haze",
-    span: "wide",
+    src: "/moments/night-road.webp",
+    alt: "A campus road at night after rain, one streetlight burning through the branches above and reflections along the wet tarmac.",
+    caption: "After the rain, before everyone came out",
+    span: "tall",
   },
   {
     src: "/moments/waves-at-night.webp",
@@ -75,9 +109,27 @@ export const moments: Moment[] = [
     span: "tall",
   },
   {
-    src: "/moments/rose.webp",
-    alt: "A single pink rose in full bloom against dark green foliage.",
-    caption: "Still the easiest subject there is",
+    src: "/moments/ridgeline-sunset.webp",
+    alt: "The sun low in a hazy orange sky over a long ridgeline of hills, with dark treetops in the foreground.",
+    caption: "Hills going flat and blue behind the haze",
+    span: "wide",
+  },
+  {
+    src: "/moments/sunset-clouds.webp",
+    alt: "Orange and grey cloud layers over a skyline of low buildings and dense trees at sunset.",
+    caption: "The sky did most of the work",
+    span: "tall",
+  },
+  {
+    src: "/moments/lightning.webp",
+    alt: "A fork of lightning across a violet storm sky above a lit apartment block.",
+    caption: "One frame, and the sky went purple",
+    span: "tall",
+  },
+  {
+    src: "/moments/starfield.webp",
+    alt: "A field of stars in a deep blue night sky, framed between a rooftop and a palm frond.",
+    caption: "You have to leave the lights behind first",
   },
   {
     src: "/moments/fog-street.webp",
@@ -92,10 +144,15 @@ export const moments: Moment[] = [
     span: "wide",
   },
   {
-    src: "/moments/sunset-clouds.webp",
-    alt: "Orange and grey cloud layers over a skyline of low buildings and dense trees at sunset.",
-    caption: "The sky did most of the work",
+    src: "/moments/sky-lantern.webp",
+    alt: "A lit paper sky lantern rising between buildings strung with blue fairy lights.",
+    caption: "It got about three floors up",
     span: "tall",
+  },
+  {
+    src: "/moments/rose.webp",
+    alt: "A single pink rose in full bloom against dark green foliage.",
+    caption: "Still the easiest subject there is",
   },
   {
     src: "/moments/cat.webp",
@@ -103,16 +160,15 @@ export const moments: Moment[] = [
     caption: "She let us, eventually",
   },
   {
-    src: "/moments/sky-lantern.webp",
-    alt: "A lit paper sky lantern rising between buildings strung with blue fairy lights.",
-    caption: "It got about three floors up",
-    span: "tall",
-  },
-  {
     src: "/moments/geese.webp",
     alt: "Five white geese walking across pavement in front of an out-of-focus blue structure.",
     caption: "They had somewhere to be",
     span: "wide",
+  },
+  {
+    src: "/moments/morning-campus.webp",
+    alt: "Low morning sun filtering through trees onto a lawn in front of a white building with striped awnings.",
+    caption: "Eight in the morning, nobody out yet",
   },
   {
     src: "/moments/campus-bus.webp",
