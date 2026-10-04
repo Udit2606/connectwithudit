@@ -1,0 +1,610 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   DESIGN TOKENS — Udit Mittal / From Systems to Products
+   One accent (Signal Amber). Near-black substrate. Warm-white type.
+   ========================================================================== */
+
+@theme {
+  /* --- Substrate ------------------------------------------------------- */
+  --color-void: #09090b;
+  --color-ink: #0c0c0f;
+  --color-slate: #131317;
+  --color-raise: #1a1a1f;
+
+  /* --- Type ------------------------------------------------------------ */
+  --color-bone: #f4f1ea;
+  --color-ash: #9b9ba3;
+  --color-dim: #62626b;
+  --color-faint: #3a3a41;
+
+  /* --- Accent (singular) ----------------------------------------------- */
+  --color-amber: #ff9a3c;
+  --color-ember: #f2701d;
+  --color-amber-dim: #a85e21;
+
+  /* --- Hairlines ------------------------------------------------------- */
+  --color-line: rgb(244 241 234 / 0.09);
+  --color-line-strong: rgb(244 241 234 / 0.18);
+
+  /* --- Families -------------------------------------------------------- */
+  --font-sans: var(--font-sans-family), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-serif-family), ui-serif, Georgia, serif;
+  --font-mono: var(--font-mono-family), ui-monospace, monospace;
+
+  /* --- Fluid display scale --------------------------------------------- */
+  --text-mono-xs: 0.625rem;
+  --text-mono-sm: 0.6875rem;
+  --text-mono-base: 0.75rem;
+
+  --text-d1: clamp(3.25rem, 13vw, 14rem);
+  --text-d2: clamp(2.5rem, 8.5vw, 8.5rem);
+  --text-d3: clamp(2rem, 5.5vw, 5rem);
+  --text-d4: clamp(1.625rem, 3.4vw, 2.875rem);
+  --text-lead: clamp(1.0625rem, 1.5vw, 1.375rem);
+
+  /* --- Motion ---------------------------------------------------------- */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quint: cubic-bezier(0.83, 0, 0.17, 1);
+  --ease-swift: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* --- Layout ---------------------------------------------------------- */
+  --spacing-gutter: clamp(1.25rem, 4vw, 5rem);
+}
+
+/* ==========================================================================
+   BASE
+   ========================================================================== */
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+:root {
+    --grain-url: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: auto;
+    background-color: var(--color-void);
+  }
+
+  /* Lenis drives scroll; keep native fallback sane when JS is absent. */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--color-void);
+    color: var(--color-bone);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01" 1, "cv01" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* No global overflow clipping here: `overflow-x: clip` on <body> makes
+     * it a clip container, which breaks both IntersectionObserver (so every
+     * scroll reveal stops firing) and `position: sticky`. Sections that move
+     * content horizontally clip themselves instead. */
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 500;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  button {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  img, svg, video, canvas {
+    display: block;
+    max-width: 100%;
+  }
+
+  ::selection {
+    background-color: var(--color-amber);
+    color: var(--color-void);
+  }
+
+  /* Keyboard focus only — never a ring on mouse users. */
+  :focus-visible {
+    outline: 2px solid var(--color-amber);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* Scrollbar: thin, substrate-matched. */
+  @supports selector(::-webkit-scrollbar) {
+    ::-webkit-scrollbar {
+      width: 9px;
+      height: 9px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--color-void);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #26262c;
+      border-radius: 99px;
+      border: 2px solid var(--color-void);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--color-amber-dim);
+    }
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #26262c var(--color-void);
+  }
+}
+
+/* ==========================================================================
+   UTILITIES
+   ========================================================================== */
+
+@utility gut {
+  padding-inline: var(--spacing-gutter);
+}
+
+/* Editorial mono label — the site's connective tissue. */
+@utility label {
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-sm);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+@utility display {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 0.88;
+  text-wrap: balance;
+}
+
+/* The identity voice. A high-contrast editorial serif needs different optics
+   to the grotesk: serifs already close the letterspacing optically, so it
+   wants far less negative tracking, and it can carry tighter leading. */
+@utility display-serif {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  /* Serifs close the letterspacing optically, so this wants far less
+     negative tracking than the grotesk. Leading stays looser than the sans
+     because the extenders are longer — too tight and an overflow mask
+     clips the baseline. */
+  letter-spacing: -0.012em;
+  line-height: 0.92;
+  text-wrap: balance;
+  font-feature-settings: "liga" 1, "kern" 1;
+}
+
+@utility hairline {
+  border-color: var(--color-line);
+}
+
+/* Film grain — breaks up flat black, sells the "photographed object" feel. */
+@utility grain {
+  position: relative;
+  isolation: isolate;
+}
+
+/* ==========================================================================
+   PRIMITIVES
+   ========================================================================== */
+
+.u-grain::after {
+  content: "";
+  position: fixed;
+  inset: -50%;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: var(--grain-url);
+  background-size: 180px 180px;
+  will-change: transform;
+  animation: grain-shift 6s steps(6) infinite;
+}
+
+@keyframes grain-shift {
+  0%, 100% { transform: translate(0, 0); }
+  16% { transform: translate(-3%, 2%); }
+  33% { transform: translate(2%, -4%); }
+  50% { transform: translate(-2%, 3%); }
+  66% { transform: translate(3%, 1%); }
+  83% { transform: translate(-1%, -2%); }
+}
+
+/* Masked line that draws itself in on scroll. */
+.u-rule {
+  height: 1px;
+  width: 100%;
+  background: var(--color-line);
+  transform-origin: left center;
+}
+
+/* Vertical ruled column markers (the "engineered page" frame). */
+.u-grid-frame {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(
+    to right,
+    var(--color-line) 0 1px,
+    transparent 1px 100%
+  );
+  background-size: 25% 100%;
+  opacity: 0.55;
+}
+
+/* Amber bloom used behind 3D + key moments. */
+.u-bloom {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(80px);
+  background: radial-gradient(circle, rgb(255 154 60 / 0.3) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Marquee track */
+.u-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee var(--marquee-duration, 40s) linear infinite;
+}
+.u-marquee[data-reverse="true"] {
+  animation-direction: reverse;
+}
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+
+/* Telemetry pulse for "live" indicators. */
+.u-pulse {
+  animation: pulse-dot 2s var(--ease-swift) infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+
+/* Data packet travelling an SVG path. */
+@keyframes dash-flow {
+  to { stroke-dashoffset: -1000; }
+}
+.u-flow {
+  animation: dash-flow var(--flow-duration, 3s) linear infinite;
+}
+
+/* ==========================================================================
+   ACCESSIBILITY — full experience must survive motion being switched off
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .u-grain::after,
+  .u-marquee,
+  .u-pulse,
+  .u-flow {
+    animation: none !important;
+  }
+}
+
+.u-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Skip link */
+.u-skip {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  transform: translateY(-200%);
+  transition: transform 0.2s var(--ease-swift);
+  background: var(--color-bone);
+  color: var(--color-void);
+  padding: 0.625rem 1rem;
+  border-radius: 2px;
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-sm);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.u-skip:focus {
+  transform: translateY(0);
+}
+
+/* Hide the native cursor only where our custom one is active. */
+@media (hover: hover) and (pointer: fine) {
+  html[data-cursor="on"],
+  html[data-cursor="on"] * {
+    cursor: none;
+  }
+}
+
+/* Hero scroll cue — a mote falling down a hairline. */
+@keyframes scroll-cue {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(300%); }
+}
+
+/* Lab grid: nudge the middle column down for an uneven, less templated rhythm. */
+:root { --lab-offset: 0rem; }
+@media (min-width: 1024px) {
+  :root { --lab-offset: 3.5rem; }
+}
+
+/* ==========================================================================
+   SCROLL REVEALS
+   Opt in with data-rise="<variant>"; RevealDriver adds data-rise-in when the
+   element enters the viewport. Hidden states are unconditional so the first
+   paint is already correct — gating them on a class added after hydration
+   makes every element transition 1 -> 0 -> 1 on load.
+   The <noscript> block in the document head reveals everything when scripts
+   are unavailable, and the driver reveals everything when the browser has no
+   IntersectionObserver, so content is never hidden by a missing capability.
+   ========================================================================== */
+
+[data-rise] {
+  --rise-duration: 900ms;
+  --rise-delay: 0ms;
+  transition-property: opacity, transform, clip-path;
+  transition-duration: var(--rise-duration);
+  transition-timing-function: var(--ease-out-expo);
+  transition-delay: var(--rise-delay);
+}
+
+/* --- up: the default fade-and-lift ------------------------------------ */
+[data-rise="up"] {
+  opacity: 0;
+  transform: translate3d(0, var(--rise-y, 1.5rem), 0);
+}
+
+/* --- side: horizontal slide, for list rows and ledger items ----------- */
+[data-rise="side"] {
+  opacity: 0;
+  transform: translate3d(var(--rise-x, -0.75rem), 0, 0);
+}
+
+/* --- fade: opacity only, where movement would fight the layout -------- */
+[data-rise="fade"] {
+  opacity: 0;
+}
+
+/* --- clip: a wipe for diagram panels and media ------------------------ */
+[data-rise="clip"] {
+  clip-path: inset(0 0 100% 0);
+  transition-duration: 1200ms;
+  transition-timing-function: var(--ease-in-out-quint);
+}
+
+/* --- rule: a hairline drawing itself in ------------------------------- */
+[data-rise="rule"] {
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition-duration: 1100ms;
+  transition-timing-function: var(--ease-in-out-quint);
+}
+
+/* --- spine: the pipeline diagram's vertical axis ---------------------- */
+[data-rise="spine"] {
+  transform: scaleY(0);
+  transform-origin: top center;
+  transition: transform 1400ms var(--ease-out-expo);
+}
+
+/* --- mask: lines rising out of their own overflow mask ----------------
+   The driver observes this container, never the translated line: a line
+   pushed below its clipping wrapper has no intersection rect of its own,
+   so observing it directly would mean it could never reveal itself. */
+[data-rise="mask"] > span > span {
+  transform: translate3d(0, 110%, 0);
+  transition: transform 1000ms var(--ease-out-expo);
+}
+[data-rise="mask"] > span:nth-child(2) > span { transition-delay: 60ms; }
+[data-rise="mask"] > span:nth-child(3) > span { transition-delay: 120ms; }
+[data-rise="mask"] > span:nth-child(4) > span { transition-delay: 180ms; }
+
+/* --- revealed --------------------------------------------------------- */
+[data-rise][data-rise-in] {
+  opacity: 1;
+  transform: none;
+  clip-path: inset(0 0 0% 0);
+}
+[data-rise="mask"][data-rise-in] > span > span {
+  transform: none;
+}
+
+/* Motion off: show everything immediately, no scrolling required. */
+@media (prefers-reduced-motion: reduce) {
+  [data-rise],
+  [data-rise="mask"] > span > span {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+    transition: none !important;
+  }
+}
+
+/* ==========================================================================
+   ARRIVAL STAGE
+   While the intro plays, the site sits behind it out of focus. The blur is
+   applied to a wrapper rather than withheld content, so the hero still
+   paints on schedule and the prologue costs nothing in LCP.
+   ========================================================================== */
+
+[data-stage] {
+  /* Transition back to 0 rather than to `none`, which is not animatable.
+     The attribute is dropped afterwards so no compositing layer lingers. */
+  transition:
+    filter 900ms var(--ease-in-out-quint),
+    transform 1400ms var(--ease-in-out-quint),
+    opacity 900ms var(--ease-in-out-quint);
+}
+
+[data-stage="blurred"] {
+  filter: blur(18px) brightness(0.5) saturate(0.85);
+  transform: scale(1.04);
+  opacity: 0.9;
+  /* Nothing behind the prologue should be clickable or tabbable-looking. */
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-stage],
+  [data-stage="blurred"] {
+    filter: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+    transition: none !important;
+    pointer-events: auto !important;
+  }
+}
+
+/* ==========================================================================
+   LIGHT MODE
+   The dark substrate is the art direction; light is a second, equally
+   authored substrate rather than an inversion. Every token keeps its *role*
+   — `void` is always the page, `bone` is always the primary type — so the
+   whole site flips by redefining the variables and no component changes.
+
+   Three things genuinely change rather than invert:
+   - The accent. #ff9a3c has about 2:1 contrast on paper, which is unusable
+     for type. Light mode uses the same hue burnt down to #b04c06 (4.8:1),
+     which is the shade that hue wants to be on a warm white.
+   - The grain multiplies instead of adding, or it reads as dirt.
+   - Additive blending in the 3D layer is invisible on paper, so the scene
+     swaps to normal blending with dark motes (see three/palette.ts).
+   ========================================================================== */
+
+:root {
+  color-scheme: dark;
+  /* Non-colour knobs the two substrates disagree on. */
+  --grain-opacity: 0.035;
+  --grain-blend: normal;
+  --bloom-color: rgb(255 154 60 / 0.3);
+  --scrollbar-thumb: #26262c;
+  --stage-brightness: 0.5;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  /* --- Substrate: warm paper, each step *lighter* as it raises ---------- */
+  --color-void: #f5f2ec;
+  --color-ink: #fdfbf6;
+  --color-slate: #eae5db;
+  --color-raise: #e0dace;
+
+  /* --- Type ------------------------------------------------------------ */
+  --color-bone: #16161a;
+  --color-ash: #55555e;
+  --color-dim: #6b6b74;
+  --color-faint: #8f8d85;
+
+  /* --- Accent: same hue, substrate-appropriate shade ------------------- */
+  --color-amber: #b04c06;
+  --color-ember: #8e3a04;
+  --color-amber-dim: #d98b45;
+
+  /* --- Hairlines ------------------------------------------------------- */
+  --color-line: rgb(22 22 26 / 0.12);
+  --color-line-strong: rgb(22 22 26 / 0.24);
+
+  --grain-opacity: 0.05;
+  --grain-blend: multiply;
+  --bloom-color: rgb(176 76 6 / 0.14);
+  --scrollbar-thumb: #cdc7bb;
+  /* Dimming a light page means brightening it, not darkening it. */
+  --stage-brightness: 1.08;
+}
+
+.u-grain::after {
+  opacity: var(--grain-opacity);
+  mix-blend-mode: var(--grain-blend);
+}
+
+.u-bloom {
+  background: radial-gradient(circle, var(--bloom-color) 0%, transparent 70%);
+}
+
+@supports selector(::-webkit-scrollbar) {
+  ::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+  }
+}
+* {
+  scrollbar-color: var(--scrollbar-thumb) var(--color-void);
+}
+
+[data-stage="blurred"] {
+  filter: blur(18px) brightness(var(--stage-brightness)) saturate(0.85);
+}
+
+/* --- The flip itself ------------------------------------------------------
+   Handled by the View Transitions API when the browser has it: one root
+   crossfade, no per-element transitions. The alternative — a temporary
+   `* { transition: color … }` rule — outranks the `[data-rise]` transitions
+   for the duration and freezes any reveal that happens to be in flight.
+   Browsers without it simply cut, which is a legitimate "lights on". */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 440ms;
+  animation-timing-function: var(--ease-in-out-quint);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
+}
+
+/* The arrival caret. Steps, not a fade: a caret does not dim, it is on or
+   off, and the whole line is a typewriter conceit. */
+@keyframes caret-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
