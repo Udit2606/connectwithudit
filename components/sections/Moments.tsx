@@ -162,10 +162,6 @@ export function Moments() {
           <p className="mt-4 max-w-[38ch] font-serif text-[1.0625rem] italic leading-[1.45] text-dim">
             {momentsIntro.note}
           </p>
-          {/* Stated plainly, because the lede above says "photographs I took". */}
-          <p className="mt-4 max-w-[40ch] text-[0.9375rem] leading-[1.6] text-faint">
-            {momentsIntro.exception}
-          </p>
         </div>
       </header>
 

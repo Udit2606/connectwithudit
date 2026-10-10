@@ -31,13 +31,10 @@ export const momentsIntro = {
   title: "Moments, kept.",
   lede: "Photographs I took because the light was doing something, and I wanted to keep it.",
   note: "Not a portfolio. No clients, no brief, no edit beyond what the moment needed.",
-  /* The lede says "photographs I took", and one of them is a photograph I am
-     standing in. Said out loud rather than left as a quiet contradiction. */
-  exception: "One of these I did not take. It is the first one, and it earned the exception.",
 };
 
 /**
- * Twenty-three photographs, ordered best first.
+ * Twenty-two photographs, ordered best first.
  *
  * This is a ranking, not a chronology. A photography page is an edit — the
  * frames that earn the top of it are the ones that are hard to take or hard
@@ -52,13 +49,6 @@ export const momentsIntro = {
  * the figcaption renders them as `place · year` and handles either alone.
  */
 export const moments: Moment[] = [
-  {
-    src: "/moments/national-engagement.webp",
-    alt: "Standing in school uniform beside the President of India, seated, with another student alongside, in a formal state reception hall.",
-    caption: "Representing the school at a national engagement",
-    year: "Nov 2022",
-    span: "wide",
-  },
   {
     src: "/moments/sunburst-skyline.webp",
     alt: "The sun breaking through a gap in heavy cloud over a city skyline, with visible shafts of light falling across the rooftops.",
