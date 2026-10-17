@@ -81,9 +81,9 @@ export function Hero() {
         className="hero-matte pointer-events-none absolute inset-0 z-10"
       />
 
-      {/* Content, centred and held high, so the screen on the desk below
-          ("What if I could build it?") stays in view. */}
-      <div className="relative z-20 flex min-h-[100svh] flex-col items-center justify-start gap-[clamp(1rem,2.5vh,1.75rem)] pb-[clamp(4rem,10vh,7rem)] pt-[clamp(6.5rem,13vh,8.5rem)] text-center gut">
+      {/* Content, centred and set low, under the desk, so the screen
+          ("What if I could build it?") stays in view above it. */}
+      <div className="relative z-20 flex min-h-[100svh] flex-col items-center justify-end gap-[clamp(1rem,2.5vh,1.75rem)] pb-[clamp(2.5rem,7vh,5rem)] pt-[clamp(6.5rem,13vh,8.5rem)] text-center gut">
         <h1 className="display-serif relative select-none whitespace-nowrap text-[clamp(2.25rem,7.5vw,7.5rem)] uppercase tracking-[0.06em] text-bone">
           <span className="u-sr">
             {site.name} — {site.role}
