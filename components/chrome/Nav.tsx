@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import { nav, site } from "@/data/site";
 import { EASE_OUT_EXPO } from "@/lib/animations/variants";
@@ -36,6 +37,11 @@ export function Nav() {
   const [condensed, setCondensed] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  /* The homepage hero is always the dark stage, so the bar takes the stage's
+     tokens while it sits over it and the page's own once it has scrolled
+     past. Seeded from the route so the first paint is already right. */
+  const pathname = usePathname();
+  const [overHero, setOverHero] = useState(pathname === "/");
 
   /**
    * The nav retracts while reading downward and returns on any upward scroll.
@@ -52,6 +58,8 @@ export function Nav() {
       const y = window.scrollY;
       const delta = y - last;
       setCondensed(y > window.innerHeight * 0.65);
+      const hero = document.getElementById("hero");
+      setOverHero(hero ? y < hero.offsetHeight - 64 : false);
 
       // Ignore sub-pixel jitter and rubber-banding at the very top.
       if (Math.abs(delta) > 6) {
@@ -71,7 +79,9 @@ export function Nav() {
       window.removeEventListener("scroll", onScroll);
       if (raf) cancelAnimationFrame(raf);
     };
-  }, []);
+    // Re-read on a route change: arriving back on the homepage puts the bar
+    // over the hero again before anything has scrolled.
+  }, [pathname]);
 
   // Close the mobile sheet on Escape, and lock the page behind it.
   useEffect(() => {
@@ -95,7 +105,12 @@ export function Nav() {
   return (
     <>
       <header
-        className="fixed inset-x-0 top-0 z-50 gut"
+        className={cn(
+          "fixed inset-x-0 top-0 z-50 gut",
+          // Not while the sheet is open: the sheet is on the page's own
+          // substrate, and the bar's controls sit on top of it.
+          overHero && !menuOpen && "hero-stage",
+        )}
         style={{
           paddingBlock: "clamp(1rem, 2.2vh, 1.75rem)",
           transform: hidden && !menuOpen ? "translateY(-115%)" : "translateY(0)",

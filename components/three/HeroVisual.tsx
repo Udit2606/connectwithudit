@@ -3,7 +3,6 @@
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 
-import { useTheme } from "@/components/chrome/Theme";
 import { SCREEN_LINES } from "@/data/screen";
 import { useDeviceTier } from "@/lib/hooks/useDeviceTier";
 import { usePrefersReducedMotion } from "@/lib/hooks/usePrefersReducedMotion";
@@ -44,8 +43,8 @@ const EDGES: [number, number][] = [
  *
  * It is not an empty box — it is the same subject, drawn flat: a figure at a
  * lit desk, the line still on the screen, the graph still above their head.
- * Every colour comes from the same tokens as the page, so it flips with the
- * substrate like everything else.
+ * Every colour comes from the page tokens, which the hero stage pins to the
+ * dark substrate.
  */
 function StaticDesk() {
   return (
@@ -201,7 +200,9 @@ export function HeroVisual({
 }) {
   const { allow3D, tier, dprCap } = useDeviceTier();
   const reduced = usePrefersReducedMotion();
-  const { theme } = useTheme();
+  /* The hero is always the dark stage (see HERO STAGE in globals.css),
+     whichever substrate the rest of the page is on, so the scene is too. */
+  const theme = "dark" as const;
   const wrapRef = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(true);
   const [idle, setIdle] = useState(false);

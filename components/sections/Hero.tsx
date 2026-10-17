@@ -71,8 +71,10 @@ export function Hero() {
       ref={sectionRef}
       id="hero"
       aria-label="Introduction"
-      className="relative isolate min-h-[100svh] overflow-hidden"
+      className="hero-stage relative isolate min-h-[100svh] overflow-hidden"
     >
+      {/* The room the hero sits in — see HERO STAGE in globals.css. */}
+      <div aria-hidden="true" className="hero-glow -z-10" />
       <div aria-hidden="true" className="u-grid-frame opacity-40" />
 
       {/* The diorama, behind the content and offset to the right */}
@@ -83,21 +85,6 @@ export function Hero() {
       {/* Content. Constrained to the left so it never sits over the visual. */}
       <div className="relative z-20 flex min-h-[100svh] flex-col justify-between gap-10 pb-[clamp(1.5rem,4vh,2.5rem)] pt-[clamp(6rem,14vh,9.5rem)] gut">
         <div className="flex flex-col gap-[clamp(1.75rem,4vh,2.75rem)]">
-          {/* Metadata rail */}
-          <motion.div
-            {...fade(0.22)}
-            className="flex flex-wrap items-center gap-x-4 gap-y-2"
-          >
-            {site.meta.education.map((item, i) => (
-              <span key={item} className="flex items-center gap-4">
-                <span className="label text-dim">{item}</span>
-                {i < site.meta.education.length - 1 ? (
-                  <span aria-hidden="true" className="h-px w-5 bg-line-strong" />
-                ) : null}
-              </span>
-            ))}
-          </motion.div>
-
           {/* The wordmark — one layer, fully legible */}
           <div className="relative w-fit lg:max-w-[46%]">
             {/*
@@ -121,7 +108,7 @@ export function Hero() {
                   "radial-gradient(68% 58% at 38% 50%, #000 38%, transparent 100%)",
               }}
             />
-            <h1 className="display-serif relative select-none text-[clamp(3rem,10vw,10.5rem)] text-bone">
+            <h1 className="relative select-none font-hero text-[clamp(3rem,8.6vw,9.25rem)] font-extralight uppercase leading-[0.92] tracking-[0.06em] text-bone">
               <span className="u-sr">
                 {site.name} — {site.role}
               </span>
@@ -149,38 +136,6 @@ export function Hero() {
                 Let&rsquo;s connect
               </ArrowLink>
             </div>
-          </motion.div>
-
-          <motion.div
-            {...fade(0.42)}
-            className="flex items-end justify-between gap-8 lg:flex-col lg:items-end lg:gap-6"
-          >
-            <div className="flex items-center gap-2.5">
-              {site.positioning.slice(0, 3).map((word, i) => (
-                <span key={word} className="flex items-center gap-2.5">
-                  <span className="label text-ash">{word}</span>
-                  {i < 2 ? (
-                    <span aria-hidden="true" className="text-amber/60">
-                      /
-                    </span>
-                  ) : null}
-                </span>
-              ))}
-            </div>
-
-            <a
-              href="#manifesto"
-              data-cursor-expand
-              className="group flex items-center gap-3 text-dim transition-colors hover:text-bone"
-            >
-              <span className="label">Scroll</span>
-              <span
-                aria-hidden="true"
-                className="relative h-8 w-px overflow-hidden bg-line-strong"
-              >
-                <span className="absolute inset-x-0 top-0 h-3 animate-[scroll-cue_2s_var(--ease-swift)_infinite] bg-amber" />
-              </span>
-            </a>
           </motion.div>
         </div>
       </div>

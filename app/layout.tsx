@@ -2,10 +2,11 @@ import type { Metadata, Viewport } from "next";
 import {
   IBM_Plex_Mono,
   Instrument_Serif,
+  Inter,
   Schibsted_Grotesk,
 } from "next/font/google";
 
-import { IntroProvider } from "@/components/chrome/Intro";
+import { ARRIVAL_BOOTSTRAP, IntroProvider } from "@/components/chrome/Intro";
 import { Cursor } from "@/components/chrome/Cursor";
 import { THEME_BOOTSTRAP, ThemeProvider } from "@/components/chrome/Theme";
 import { RevealDriver } from "@/components/chrome/RevealDriver";
@@ -46,6 +47,18 @@ const mono = IBM_Plex_Mono({
   variable: "--font-mono-family",
   display: "swap",
   weight: ["400", "500"],
+});
+
+/**
+ * Inter at its lightest weights, for the hero wordmark only: thin strokes,
+ * open capitals and wide tracking, so the name reads as a title card rather
+ * than a headline.
+ */
+const hero = Inter({
+  subsets: ["latin"],
+  variable: "--font-hero-family",
+  display: "swap",
+  weight: ["200", "300"],
 });
 
 export const metadata: Metadata = {
@@ -123,7 +136,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${sans.variable} ${serif.variable} ${mono.variable}`}
+      className={`${sans.variable} ${serif.variable} ${mono.variable} ${hero.variable}`}
       /* The theme bootstrap puts data-theme here before React hydrates, so
          the server markup and the live document legitimately differ by one
          attribute. Suppressing the warning is the supported way to say so;
@@ -134,6 +147,9 @@ export default function RootLayout({
         {/* Substrate first: this has to run before the first paint, or a
             light-mode visitor gets a black flash on every navigation. */}
         <script dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP }} />
+        {/* The arrival starts on a blank screen; hold the page dark until
+            the overlay can take over. */}
+        <script dangerouslySetInnerHTML={{ __html: ARRIVAL_BOOTSTRAP }} />
         {/* Without scripts nothing can trigger a reveal, so show it all. */}
         <noscript>
           <style>{`[data-rise],[data-rise="mask"] > span > span{opacity:1!important;transform:none!important;clip-path:none!important}`}</style>
