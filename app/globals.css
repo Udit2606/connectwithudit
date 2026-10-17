@@ -31,8 +31,6 @@
   --font-sans: var(--font-sans-family), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-serif-family), ui-serif, Georgia, serif;
   --font-mono: var(--font-mono-family), ui-monospace, monospace;
-  /* The hero wordmark: a wide, high-contrast display serif in capitals. */
-  --font-hero: var(--font-hero-family), Didot, "Bodoni 72", Georgia, serif;
 
   /* --- Fluid display scale --------------------------------------------- */
   --text-mono-xs: 0.625rem;
@@ -358,6 +356,20 @@
   transform: translateY(0);
 }
 
+/* Hide the native cursor only where our custom one is active. */
+@media (hover: hover) and (pointer: fine) {
+  html[data-cursor="on"],
+  html[data-cursor="on"] * {
+    cursor: none;
+  }
+}
+
+/* Hero scroll cue — a mote falling down a hairline. */
+@keyframes scroll-cue {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(300%); }
+}
+
 /* Lab grid: nudge the middle column down for an uneven, less templated rhythm. */
 :root { --lab-offset: 0rem; }
 @media (min-width: 1024px) {
@@ -515,8 +527,6 @@
   --bloom-color: rgb(255 154 60 / 0.3);
   --scrollbar-thumb: #26262c;
   --stage-brightness: 0.5;
-  /* Lifts the hero name off the coloured sky; paper needs no help. */
-  --hero-name-shadow: 0 2px 40px rgb(0 0 0 / 0.35);
 }
 
 /* Light is the default, so this has to match an absent attribute too: the
@@ -554,7 +564,6 @@
   --scrollbar-thumb: #cdc7bb;
   /* Dimming a light page means brightening it, not darkening it. */
   --stage-brightness: 1.08;
-  --hero-name-shadow: none;
 }
 
 .u-grain::after {
@@ -598,98 +607,9 @@
   }
 }
 
-/* ==========================================================================
-   HERO SKY
-   A soft gradient that rises from the bottom of the first screen when the
-   page arrives: a blue wave on paper, a blue-to-red spectrum in the dark.
-   Each substrate draws its own (see Hero), and only the one that matches
-   the current theme is shown.
-   ========================================================================== */
-
-.hero-sky-rise {
-  position: absolute;
-  inset: 0;
-  transform: translate3d(0, 70%, 0);
-  opacity: 0;
-  transition:
-    transform 2.4s var(--ease-out-expo),
-    opacity 1.4s var(--ease-out-expo);
-  will-change: transform;
-}
-.hero-sky-rise[data-up] {
-  transform: none;
-  opacity: 1;
-}
-
-.hero-sky {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-:root[data-theme="dark"] .hero-sky--light,
-:root:not([data-theme="dark"]) .hero-sky--dark {
-  display: none;
-}
-/* On a portrait screen the sides of the dark V are cropped away and what
-   is left of the spectrum already sits below the text, so the clear pocket
-   behind the statement would only hide the colour. */
-@media (max-aspect-ratio: 1/1) {
-  .hero-sky-pocket {
-    mask: none;
-  }
-}
-
-.hero-name {
-  text-shadow: var(--hero-name-shadow);
-}
-
-/* Held dark from the very first paint until the arrival overlay takes over
-   (see ARRIVAL_BOOTSTRAP in components/chrome/Intro). */
-html[data-arrival="pending"] body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 96;
-  background: #000;
-}
-
-/* ==========================================================================
-   ARRIVAL MESSAGE
-   A sent iMessage bubble. The tail is the usual two-pseudo-element cut: a
-   blue corner, then a notch in the overlay's own colour taken out of it.
-   ========================================================================== */
-
-.imsg {
-  --imsg-blue: #0a84ff;
-  --imsg-ground: #000;
-  position: relative;
-  display: inline-block;
-  padding: 0.5em 0.85em 0.55em;
-  border-radius: 1.15em;
-  background: var(--imsg-blue);
-  color: #fff;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", "Segoe UI", Roboto, Arial, sans-serif;
-  font-weight: 400;
-  line-height: 1.25;
-  letter-spacing: -0.01em;
-}
-.imsg::before,
-.imsg::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  height: 1.05em;
-}
-.imsg::before {
-  right: -0.4em;
-  width: 1.05em;
-  background: var(--imsg-blue);
-  border-bottom-left-radius: 0.85em 0.75em;
-}
-.imsg::after {
-  right: -0.65em;
-  width: 0.65em;
-  background: var(--imsg-ground);
-  border-bottom-left-radius: 0.55em;
+/* The arrival caret. Steps, not a fade: a caret does not dim, it is on or
+   off, and the whole line is a typewriter conceit. */
+@keyframes caret-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
 }

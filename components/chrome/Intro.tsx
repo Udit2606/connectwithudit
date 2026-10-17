@@ -11,8 +11,14 @@ import {
   type ReactNode,
 } from "react";
 
-import { ARRIVAL_LINE, HOLD_MS, LAND_MS, LEAD_IN_MS } from "@/data/intro";
-import { EASE_IN_OUT_QUINT } from "@/lib/animations/variants";
+import {
+  ARRIVAL_LINE,
+  arrivalSchedule,
+  HOLD_MS,
+  LAND_MS,
+  TYPE_TOTAL_MS,
+} from "@/data/intro";
+import { EASE_IN_OUT_QUINT, EASE_OUT_EXPO } from "@/lib/animations/variants";
 import { usePrefersReducedMotion } from "@/lib/hooks/usePrefersReducedMotion";
 import { useSmoothScroll } from "./SmoothScroll";
 
@@ -24,35 +30,19 @@ export const useIntro = () => useContext(IntroContext);
 const SESSION_KEY = "um:intro";
 
 /**
- * Runs before first paint, inlined in the document head.
+ * The arrival: one line typed onto a blurred page, which then comes into
+ * focus underneath it.
  *
- * The prologue starts on a blank dark screen, but React cannot put anything
- * on screen before it hydrates, so without this the homepage would flash up
- * for a moment first. When the prologue is going to play — front door, not
- * yet seen this session, motion allowed — this marks the document so CSS can
- * hold it dark until the overlay takes over. It gives up after a few seconds
- * regardless, so a script failure can never leave the page black; the mark
- * then reads "expired", and the prologue is skipped rather than blacking out
- * a page the visitor has already been looking at.
- */
-export const ARRIVAL_BOOTSTRAP = `(function(){try{if(location.pathname!=="/")return;if(sessionStorage.getItem(${JSON.stringify(
-  SESSION_KEY,
-)})==="1")return;if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;var d=document.documentElement;d.setAttribute("data-arrival","pending");setTimeout(function(){if(d.getAttribute("data-arrival")==="pending")d.setAttribute("data-arrival","expired")},6000)}catch(e){}})()`;
-
-/**
- * The arrival: a blank dark screen, then one message pops in the way a new
- * iMessage does, then the page comes up behind it.
- *
- * The page renders the whole time, held out of focus behind the screen, so
- * the hero is already painted when the screen lets go instead of starting
- * from nothing.
+ * The page renders the whole time, out of focus rather than withheld — that
+ * is what the line is being read *against*, and it means the hero is already
+ * painted when the blur comes off instead of starting from nothing.
  */
 export function IntroProvider({ children }: { children: ReactNode }) {
   const reduced = usePrefersReducedMotion();
   const { stop, start } = useSmoothScroll();
   const [phase, setPhase] = useState<"idle" | "running" | "done">("idle");
-  /** Whether the message has popped in yet. */
-  const [popped, setPopped] = useState(false);
+  /** How many characters of the line are down. */
+  const [typed, setTyped] = useState(0);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   const finish = useCallback(() => {
@@ -84,16 +74,11 @@ export function IntroProvider({ children }: { children: ReactNode }) {
      */
     const atFrontDoor = window.location.pathname === "/";
 
-    // The pre-paint cover ran out before the page could hydrate (a slow
-    // connection), so the page is already on screen.
-    const expired =
-      document.documentElement.getAttribute("data-arrival") === "expired";
-
-    // Already arrived this session, deep-linked in, motion is switched off,
-    // or the page has been showing for a while: go straight in.
-    if (seen || reduced || expired || !atFrontDoor) {
+    // Already arrived this session, deep-linked in, or motion is switched
+    // off: go straight in.
+    if (seen || reduced || !atFrontDoor) {
       setPhase("done");
-      if (!atFrontDoor || expired) {
+      if (!atFrontDoor) {
         try {
           sessionStorage.setItem(SESSION_KEY, "1");
         } catch {
@@ -107,9 +92,18 @@ export function IntroProvider({ children }: { children: ReactNode }) {
     window.scrollTo(0, 0);
     stop();
 
-    // A beat of blank screen, the pop, a hold, then the page.
-    timers.current.push(setTimeout(() => setPopped(true), LEAD_IN_MS));
-    timers.current.push(setTimeout(finish, LEAD_IN_MS + HOLD_MS));
+    /*
+     * One timer per character, at the times the schedule gives rather than
+     * on a fixed interval. The timers array is already the cancellation
+     * mechanism for skipping, and scheduling each keystroke against the
+     * start means a dropped frame shortens one gap instead of dragging the
+     * whole line late — which an interval would do.
+     */
+    const schedule = arrivalSchedule(ARRIVAL_LINE);
+    schedule.forEach((at, i) => {
+      timers.current.push(setTimeout(() => setTyped(i + 1), at));
+    });
+    timers.current.push(setTimeout(finish, TYPE_TOTAL_MS + HOLD_MS));
 
     return () => {
       timers.current.forEach(clearTimeout);
@@ -121,14 +115,6 @@ export function IntroProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (phase === "done") start();
-    // The pre-paint cover hands over only once the overlay is on screen.
-    // `reduced` starts out pessimistic, so the phase can read "done" for one
-    // render before it becomes "running"; lifting the cover then would flash
-    // the page between two black screens. When there is no prologue the
-    // bootstrap never set the cover, or it has already expired.
-    if (phase === "running") {
-      document.documentElement.removeAttribute("data-arrival");
-    }
   }, [phase, start]);
 
   // Any deliberate input skips ahead. Nobody should be trapped in a prologue.
@@ -148,10 +134,14 @@ export function IntroProvider({ children }: { children: ReactNode }) {
 
   const running = phase === "running";
   const done = phase === "done";
-  /* The page stays out of focus for the whole prologue and comes back as
-     part of the landing — `data-stage` drops the instant the phase ends, and
-     its own filter transition runs underneath the screen's exit, so the page
-     resolves into focus while the dark screen is still letting go. */
+  /* The blur holds for the whole prologue and comes off as part of the
+     landing — `data-stage` drops the instant the phase ends, and its own
+     900ms filter transition runs underneath the overlay's 1400ms exit, so
+     the page resolves into focus while the overlay is still letting go.
+     An earlier version lifted it two thirds of the way through the typing
+     to save LCP, which did save LCP and also meant the line spent its last
+     third sitting on top of a sharp page, reading as a caption rather than
+     as something you are being shown before you arrive. */
   const blurred = running;
 
   return (
@@ -162,38 +152,75 @@ export function IntroProvider({ children }: { children: ReactNode }) {
         {running ? (
           <motion.div
             key="intro"
-            className="fixed inset-0 z-[95] grid cursor-pointer place-items-center bg-black gut"
-            initial={{ opacity: 1 }}
+            className="fixed inset-0 z-[95] grid cursor-pointer place-items-center gut"
+            initial={{ opacity: 0, scale: 1 }}
+            /* A very slow push-in over the whole sequence. Fifteen
+               thousandths of scale — not visible as movement, only as the
+               shot not being locked off. */
+            animate={{ opacity: 1, scale: 1.015 }}
             exit={{
+              // The landing: the overlay drifts toward the viewer and lets go
+              // as the page comes up to meet it.
               opacity: 0,
+              scale: 1.07,
+              filter: "blur(10px)",
               transition: { duration: LAND_MS / 1000, ease: EASE_IN_OUT_QUINT },
+            }}
+            transition={{
+              opacity: { duration: 0.75 },
+              scale: { duration: (TYPE_TOTAL_MS + HOLD_MS) / 1000, ease: "linear" },
             }}
             onClick={finish}
             role="status"
             aria-live="polite"
           >
-            <span className="u-sr">{ARRIVAL_LINE}</span>
+            {/*
+              The scrim. Solid at the edges, thinnest in the middle, so the
+              blurred page reads as depth behind the line rather than as a
+              flat colour field. Both layers are token-driven, so this is a
+              warm white in light mode without a second code path.
+            */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 -z-10 bg-void/[0.92]"
+            />
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 -z-10"
+              style={{
+                background:
+                  "radial-gradient(58% 58% at 50% 50%, transparent 0%, var(--color-void) 100%)",
+              }}
+            />
 
-            {/* The message. A sent bubble, popping in from its tail corner
-                with a little overshoot, the way a new iMessage lands. */}
-            {popped ? (
-              <motion.p
-                aria-hidden="true"
-                className="imsg text-[clamp(1.5rem,2.8vw,2.125rem)]"
-                style={{ transformOrigin: "100% 100%" }}
-                initial={{ opacity: 0, scale: 0.4, y: 18 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                transition={{
-                  type: "spring",
-                  stiffness: 520,
-                  damping: 24,
-                  mass: 0.8,
-                  opacity: { duration: 0.18 },
-                }}
-              >
-                {ARRIVAL_LINE}
-              </motion.p>
-            ) : null}
+            {/* The line. Nothing else — that is the whole brief. */}
+            <p className="display-serif relative text-center text-[clamp(2.25rem,7.5vw,5.75rem)] text-bone">
+              <span className="u-sr">{ARRIVAL_LINE}</span>
+              <span aria-hidden="true">
+                {ARRIVAL_LINE.slice(0, typed)}
+                {/* A block caret that blinks only once the line is down —
+                    while it is typing, a blinking caret fights the letters. */}
+                <span
+                  className="ml-[0.08em] inline-block h-[0.72em] w-[0.055em] translate-y-[0.02em] bg-amber align-baseline"
+                  style={
+                    typed >= ARRIVAL_LINE.length
+                      ? { animation: "caret-blink 1.1s steps(1) infinite" }
+                      : undefined
+                  }
+                />
+              </span>
+            </p>
+
+            {/* A hairline drawing itself under the line as it types. */}
+            <motion.span
+              aria-hidden="true"
+              className="absolute bottom-[clamp(2.5rem,9vh,5rem)] h-px bg-gradient-to-r from-transparent via-amber/45 to-transparent"
+              initial={{ width: 0 }}
+              animate={{
+                width: `${(typed / ARRIVAL_LINE.length) * 34 + 4}vw`,
+              }}
+              transition={{ duration: 0.55, ease: EASE_OUT_EXPO }}
+            />
           </motion.div>
         ) : null}
       </AnimatePresence>

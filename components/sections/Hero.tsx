@@ -1,177 +1,46 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
 
 import { useIntro } from "@/components/chrome/Intro";
+import { HeroVisual } from "@/components/three/HeroVisual";
 import { ArrowLink } from "@/components/ui/ArrowLink";
 import { site } from "@/data/site";
 import { EASE_OUT_EXPO } from "@/lib/animations/variants";
 
 /**
- * The paper sky: a soft blue wave across the lower part of the screen, with
- * a deeper fold running through it and a paler dip where the statement sits.
+ * The hero: wordmark on the left, the diorama clear of it on the right.
  *
- * Both skies are drawn on a 1440×900 stage and cover the hero the way a
- * background image would (`slice`), so a phone shows the middle of the wave
- * rather than a squeezed copy of all of it.
- */
-function LightSky() {
-  return (
-    <svg
-      viewBox="0 0 1440 900"
-      preserveAspectRatio="xMidYMax slice"
-      className="hero-sky hero-sky--light"
-    >
-      <defs>
-        <filter
-          id="sky-blur-light"
-          filterUnits="userSpaceOnUse"
-          x="-200"
-          y="-100"
-          width="1840"
-          height="1200"
-        >
-          <feGaussianBlur stdDeviation="44" />
-        </filter>
-        <linearGradient id="sky-body-light" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#84b9ff" />
-          <stop offset="1" stopColor="#8fc1ee" />
-        </linearGradient>
-        {/* The wave fades out against the left edge, as in the reference. */}
-        <linearGradient id="sky-edge-light" x1="0" x2="1">
-          <stop offset="0" stopColor="#000" />
-          <stop offset="0.1" stopColor="#fff" />
-        </linearGradient>
-        <radialGradient id="sky-dip-light">
-          <stop offset="0" stopColor="#000" stopOpacity="0.85" />
-          <stop offset="0.5" stopColor="#000" stopOpacity="0.6" />
-          <stop offset="1" stopColor="#000" stopOpacity="0" />
-        </radialGradient>
-        <mask
-          id="sky-mask-light"
-          maskUnits="userSpaceOnUse"
-          x="0"
-          y="0"
-          width="1440"
-          height="900"
-        >
-          <rect width="1440" height="900" fill="url(#sky-edge-light)" />
-          <ellipse
-            cx="800"
-            cy="640"
-            rx="340"
-            ry="140"
-            fill="url(#sky-dip-light)"
-          />
-        </mask>
-      </defs>
-      <g mask="url(#sky-mask-light)">
-        <g filter="url(#sky-blur-light)">
-          <path
-            d="M-80 560 C150 470 330 420 480 440 C620 460 680 600 800 620 C940 640 1060 520 1220 490 C1350 470 1440 470 1520 470 L1520 980 L-80 980 Z"
-            fill="url(#sky-body-light)"
-          />
-          <ellipse cx="500" cy="650" rx="200" ry="110" fill="#62a8ff" />
-          <ellipse cx="840" cy="800" rx="280" ry="70" fill="#5ea9ff" />
-          <ellipse cx="1250" cy="650" rx="280" ry="110" fill="#6db0ff" />
-          <rect x="-80" y="830" width="1600" height="150" fill="#8fc0ec" />
-        </g>
-      </g>
-    </svg>
-  );
-}
-
-/**
- * The dark sky: blue at the leading edge, then pink and red below. It rises
- * high at the sides and dips in a V through the middle, so the name and the
- * statement stay on the dark.
- */
-function DarkSky() {
-  return (
-    <svg
-      viewBox="0 0 1440 900"
-      preserveAspectRatio="xMidYMax slice"
-      className="hero-sky hero-sky--dark"
-    >
-      <defs>
-        <filter
-          id="sky-blur-dark"
-          filterUnits="userSpaceOnUse"
-          x="-200"
-          y="-100"
-          width="1840"
-          height="1200"
-        >
-          <feGaussianBlur stdDeviation="52" />
-        </filter>
-        <linearGradient id="sky-floor-dark" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#ff2d6f" />
-          <stop offset="1" stopColor="#ff5a2e" />
-        </linearGradient>
-        <radialGradient id="sky-hole-dark">
-          <stop offset="0" stopColor="#000" />
-          <stop offset="0.55" stopColor="#000" stopOpacity="0.85" />
-          <stop offset="1" stopColor="#000" stopOpacity="0" />
-        </radialGradient>
-        {/* A clear pocket in the V, behind the statement and the buttons. */}
-        <mask
-          id="sky-mask-dark"
-          maskUnits="userSpaceOnUse"
-          x="0"
-          y="0"
-          width="1440"
-          height="900"
-        >
-          <rect width="1440" height="900" fill="#fff" />
-          <ellipse
-            cx="720"
-            cy="600"
-            rx="440"
-            ry="200"
-            fill="url(#sky-hole-dark)"
-          />
-        </mask>
-      </defs>
-      <g mask="url(#sky-mask-dark)" className="hero-sky-pocket">
-        <g filter="url(#sky-blur-dark)">
-          <path
-            d="M-80 340 C260 360 520 560 720 670 C920 560 1180 360 1520 340 L1520 980 L-80 980 Z"
-            fill="#4c6dff"
-          />
-          <path
-            d="M-80 480 C280 500 540 680 720 770 C900 680 1160 500 1520 480 L1520 980 L-80 980 Z"
-            fill="#ee62d6"
-          />
-          <ellipse cx="720" cy="760" rx="160" ry="100" fill="#5b7bff" />
-          <path
-            d="M-80 700 C300 710 560 800 720 840 C880 800 1140 710 1520 700 L1520 980 L-80 980 Z"
-            fill="url(#sky-floor-dark)"
-          />
-        </g>
-      </g>
-    </svg>
-  );
-}
-
-/**
- * The hero: the name, set large across the centre of the stage, with one
- * line about the work and two ways in beneath it.
- *
- * Nothing competes with the name. It is the one element on the first screen
- * that has to be unmistakable, so it takes the middle of the screen and the
- * sky rises up behind it.
+ * An earlier version split the wordmark across two layers so the 3D object
+ * passed between "Udit" and "Mittal". It was a nice trick and the wrong call:
+ * the surname spent most of its time half-occluded by a monitor. The name is
+ * the one element that has to be unmistakable, so it gets its own column and
+ * the visual gets the other.
  */
 export function Hero() {
   const { done } = useIntro();
   const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
-  // The sky fades out as the hero scrolls away, so the page below it is the
-  // plain substrate again.
-  const skyOpacity = useTransform(scrollYProgress, [0, 0.85], [1, 0]);
+  /** 0 → 1 across the hero's own height; read by the 3D scene each frame. */
+  const progress = useRef(0);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const onScroll = () => {
+      const h = el.offsetHeight || window.innerHeight;
+      progress.current = Math.min(Math.max(window.scrollY / h, 0), 1);
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
 
   /**
    * Entrance offsets are kept tight on purpose. These run after the intro
@@ -204,53 +73,116 @@ export function Hero() {
       aria-label="Introduction"
       className="relative isolate min-h-[100svh] overflow-hidden"
     >
-      {/* The sky. It rises from below once the page has arrived (see HERO
-          SKY in globals.css) and fades as the hero scrolls away. */}
-      <motion.div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10"
-        style={{ opacity: skyOpacity }}
-      >
-        <div className="hero-sky-rise" data-up={done ? "" : undefined}>
-          <LightSky />
-          <DarkSky />
-        </div>
-      </motion.div>
       <div aria-hidden="true" className="u-grid-frame opacity-40" />
 
-      {/* Content, centred on the stage. */}
-      <div className="relative z-20 flex min-h-[100svh] flex-col items-center justify-center pb-[clamp(4rem,10vh,7rem)] pt-[clamp(6rem,14vh,9.5rem)] text-center gut">
-        {/* The wordmark. The tracking is balanced with an equal indent so the
-            letters, not the trailing space after the last one, sit centred. */}
-        <h1 className="hero-name select-none pl-[0.02em] font-hero text-[19vw] font-[300] uppercase leading-[0.92] tracking-[0.02em] text-bone sm:text-[clamp(3.5rem,12vw,13rem)]">
-          <span className="u-sr">
-            {site.name} — {site.role}
-          </span>
-          {line("Udit", 0.04)}
-          {line("Mittal", 0.13)}
-        </h1>
+      {/* The diorama, behind the content and offset to the right */}
+      <div className="absolute inset-0 z-0">
+        <HeroVisual progress={progress} ready={done} />
+      </div>
+
+      {/* Content. Constrained to the left so it never sits over the visual. */}
+      <div className="relative z-20 flex min-h-[100svh] flex-col justify-between gap-10 pb-[clamp(1.5rem,4vh,2.5rem)] pt-[clamp(6rem,14vh,9.5rem)] gut">
+        <div className="flex flex-col gap-[clamp(1.75rem,4vh,2.75rem)]">
+          {/* Metadata rail */}
+          <motion.div
+            {...fade(0.22)}
+            className="flex flex-wrap items-center gap-x-4 gap-y-2"
+          >
+            {site.meta.education.map((item, i) => (
+              <span key={item} className="flex items-center gap-4">
+                <span className="label text-dim">{item}</span>
+                {i < site.meta.education.length - 1 ? (
+                  <span aria-hidden="true" className="h-px w-5 bg-line-strong" />
+                ) : null}
+              </span>
+            ))}
+          </motion.div>
+
+          {/* The wordmark — one layer, fully legible */}
+          <div className="relative w-fit lg:max-w-[46%]">
+            {/*
+              The translucency sits behind the name and nowhere else.
+              An earlier version was a column-wide gradient, which also
+              veiled the diorama — so this is masked down to a soft haze the
+              size of the two lines, feathering out well before it reaches
+              the scene. The mask is what keeps it from reading as a panel:
+              a hard-edged blurred rectangle behind type looks like a bug.
+            */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -z-10 backdrop-blur-[7px]"
+              style={{
+                inset: "-14% -11%",
+                background:
+                  "radial-gradient(68% 58% at 38% 50%, color-mix(in srgb, var(--color-void) 78%, transparent) 0%, transparent 100%)",
+                maskImage:
+                  "radial-gradient(68% 58% at 38% 50%, #000 38%, transparent 100%)",
+                WebkitMaskImage:
+                  "radial-gradient(68% 58% at 38% 50%, #000 38%, transparent 100%)",
+              }}
+            />
+            <h1 className="display-serif relative select-none text-[clamp(3rem,10vw,10.5rem)] text-bone">
+              <span className="u-sr">
+                {site.name} — {site.role}
+              </span>
+              {line("Udit", 0.04)}
+              {line("Mittal", 0.13)}
+            </h1>
+          </div>
+        </div>
 
         {/* Statement + actions */}
-        <motion.div
-          {...fade(0.3)}
-          className="mt-[clamp(1.75rem,4vh,2.75rem)] flex flex-col items-center gap-7"
-        >
-          <p className="max-w-[40ch] text-lead leading-[1.45] text-bone">
-            Software engineer building{" "}
-            <em className="whitespace-nowrap font-serif text-[1.06em] italic text-amber">
-              AI-powered products
-            </em>{" "}
-            and cloud-native systems.
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            <ArrowLink href="#work" variant="filled" cursorLabel="Explore">
-              Explore work
-            </ArrowLink>
-            <ArrowLink href="#contact" variant="outline">
-              Let&rsquo;s connect
-            </ArrowLink>
-          </div>
-        </motion.div>
+        <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
+          <motion.div {...fade(0.3)} className="space-y-7">
+            <p className="max-w-[32ch] text-lead leading-[1.45] text-bone">
+              Software engineer building{" "}
+              <em className="whitespace-nowrap font-serif text-[1.06em] italic text-amber">
+                AI-powered products
+              </em>{" "}
+              and cloud-native systems.
+            </p>
+            <div className="flex flex-wrap items-center gap-3">
+              <ArrowLink href="#work" variant="filled" cursorLabel="Explore">
+                Explore work
+              </ArrowLink>
+              <ArrowLink href="#contact" variant="outline">
+                Let&rsquo;s connect
+              </ArrowLink>
+            </div>
+          </motion.div>
+
+          <motion.div
+            {...fade(0.42)}
+            className="flex items-end justify-between gap-8 lg:flex-col lg:items-end lg:gap-6"
+          >
+            <div className="flex items-center gap-2.5">
+              {site.positioning.slice(0, 3).map((word, i) => (
+                <span key={word} className="flex items-center gap-2.5">
+                  <span className="label text-ash">{word}</span>
+                  {i < 2 ? (
+                    <span aria-hidden="true" className="text-amber/60">
+                      /
+                    </span>
+                  ) : null}
+                </span>
+              ))}
+            </div>
+
+            <a
+              href="#manifesto"
+              data-cursor-expand
+              className="group flex items-center gap-3 text-dim transition-colors hover:text-bone"
+            >
+              <span className="label">Scroll</span>
+              <span
+                aria-hidden="true"
+                className="relative h-8 w-px overflow-hidden bg-line-strong"
+              >
+                <span className="absolute inset-x-0 top-0 h-3 animate-[scroll-cue_2s_var(--ease-swift)_infinite] bg-amber" />
+              </span>
+            </a>
+          </motion.div>
+        </div>
       </div>
 
       {/* Dissolve into the next section */}
