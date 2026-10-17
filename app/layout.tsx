@@ -152,7 +152,7 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: ARRIVAL_BOOTSTRAP }} />
         {/* Without scripts nothing can trigger a reveal, so show it all. */}
         <noscript>
-          <style>{`[data-rise],[data-rise="mask"] > span > span{opacity:1!important;transform:none!important;clip-path:none!important}`}</style>
+          <style>{`[data-rise],[data-rise="mask"] > span > span,.hero-sky-rise{opacity:1!important;transform:none!important;clip-path:none!important}`}</style>
         </noscript>
       </head>
       <body className="u-grain antialiased">
