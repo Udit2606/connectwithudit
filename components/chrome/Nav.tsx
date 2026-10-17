@@ -257,7 +257,6 @@ export function Nav() {
                     <span className="display text-[2rem] text-bone">
                       {item.label}
                     </span>
-                    <span className="label text-faint">0{i + 1}</span>
                   </motion.a>
                 </div>
               ))}

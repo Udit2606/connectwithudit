@@ -27,9 +27,6 @@ function Chapter({ chapter }: { chapter: (typeof story)[number] }) {
           style={{ y }}
           className="flex items-baseline gap-4 md:flex-col md:gap-5"
         >
-          <span className="display text-[clamp(2.25rem,4vw,3.75rem)] text-faint">
-            {chapter.index}
-          </span>
           <span className="label max-w-[18ch] leading-[1.6] text-dim">
             {chapter.marker}
           </span>
@@ -65,7 +62,6 @@ export function Story() {
       className="relative py-[clamp(5rem,12vh,9rem)] gut"
     >
       <SectionHeader
-        index="03"
         label="Story"
         title={["Five chapters,", "one direction."]}
         lede="Saharanpur to Vellore, curiosity to systems. The short version of how I got to building the things below."

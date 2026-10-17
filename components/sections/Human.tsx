@@ -17,7 +17,6 @@ export function Human() {
       className="relative py-[clamp(5rem,12vh,9rem)] gut"
     >
       <SectionHeader
-        index="07"
         label={humanIntro.kicker}
         title={["Engineering is a team sport", "before it's a technical one."]}
         lede={humanIntro.note}
@@ -36,7 +35,6 @@ export function Human() {
               className="group grid gap-x-6 gap-y-3 border-t border-line py-7 sm:grid-cols-[auto_1fr]"
             >
               <div className="flex items-baseline gap-4 sm:w-24 sm:flex-col sm:gap-2">
-                <span className="label text-faint">{role.index}</span>
                 <span className="label text-dim">{role.period}</span>
               </div>
 

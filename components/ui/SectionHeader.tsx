@@ -2,7 +2,6 @@ import { cn } from "@/lib/utils/cn";
 import { MaskText } from "./MaskText";
 
 type SectionHeaderProps = {
-  index: string;
   label: string;
   /** Pre-split headline lines. */
   title: readonly string[];
@@ -11,9 +10,8 @@ type SectionHeaderProps = {
   align?: "start" | "between";
 };
 
-/** The repeating header unit: index · label · drawn rule · headline. */
+/** The repeating header unit: label · drawn rule · headline. */
 export function SectionHeader({
-  index,
   label,
   title,
   lede,
@@ -23,7 +21,6 @@ export function SectionHeader({
   return (
     <div className={cn("space-y-8", className)}>
       <div className="flex items-baseline gap-4">
-        <span className="label text-amber">{index}</span>
         <span className="label text-dim">{label}</span>
         <span
           aria-hidden="true"

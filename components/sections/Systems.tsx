@@ -31,7 +31,6 @@ export function Systems() {
       className="relative py-[clamp(5rem,12vh,9rem)] gut"
     >
       <SectionHeader
-        index="05"
         label="Under the Surface"
         title={["The stack,", "as it's actually built."]}
         lede="Five layers. Open one to see what runs there, and where I've actually shipped it."
@@ -62,14 +61,6 @@ export function Systems() {
                       data-cursor-expand
                       className="group flex w-full items-center gap-5 py-6 text-left"
                     >
-                      <span
-                        className={cn(
-                          "label w-8 shrink-0 transition-colors duration-500",
-                          isOpen ? "text-amber" : "text-faint",
-                        )}
-                      >
-                        {layer.index}
-                      </span>
 
                       {/* The stratum itself — a plate, seen edge-on */}
                       <span

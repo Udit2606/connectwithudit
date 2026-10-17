@@ -66,7 +66,6 @@ export function Contact() {
       <div className="gut">
         {/* The closing statement */}
         <div className="flex items-baseline gap-4">
-          <span className="label shrink-0 text-amber">08</span>
           <MaskText
             as="h2"
             lines={["Build something", "worth remembering."]}

@@ -45,9 +45,6 @@ function ProjectRow({ project, i }: { project: Project; i: number }) {
           )}
         >
           <div className="flex items-baseline gap-5">
-            <span className="display text-[clamp(2.5rem,5vw,4.5rem)] text-faint transition-colors duration-700 group-hover:text-amber">
-              {project.index}
-            </span>
             <div className="flex flex-col gap-1.5">
               <span className="label text-amber">{project.kicker}</span>
               <span className="label text-dim">
@@ -167,7 +164,6 @@ export function Work() {
       className="relative py-[clamp(5rem,12vh,9rem)] gut"
     >
       <SectionHeader
-        index="04"
         label="Selected Work"
         title={["Three systems,", "built end to end."]}
         lede="Each one is a product with a real architecture behind it. The diagrams are the systems — not mockups."

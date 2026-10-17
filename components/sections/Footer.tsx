@@ -33,7 +33,7 @@ export function Footer() {
         <nav aria-label="Footer" className="lg:col-span-4">
           <span className="label mb-4 block text-dim">Index</span>
           <ul className="grid grid-cols-2 gap-y-2.5">
-            {nav.map((item, i) => (
+            {nav.map((item) => (
               <li key={item.id}>
                 <a
                   href={item.href}
@@ -42,9 +42,8 @@ export function Footer() {
                     scrollTo(item.href, -24);
                   }}
                   data-cursor-expand
-                  className="label inline-flex items-baseline gap-2 text-ash transition-colors hover:text-amber"
+                  className="label inline-flex items-baseline text-ash transition-colors hover:text-amber"
                 >
-                  <span className="text-faint">0{i + 1}</span>
                   {item.label}
                 </a>
               </li>

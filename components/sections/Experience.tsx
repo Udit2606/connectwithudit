@@ -43,9 +43,6 @@ function RoleBlock({ role }: { role: Role }) {
         <header className="lg:col-span-4">
           <div className="sticky top-32 space-y-5">
             <div className="flex items-baseline gap-4">
-              <span className="display text-[clamp(2.25rem,4vw,3.5rem)] text-faint">
-                {role.index}
-              </span>
               <span className="label text-dim">{role.period}</span>
             </div>
 
@@ -116,7 +113,6 @@ export function ExperienceSection() {
       className="relative py-[clamp(5rem,12vh,9rem)] gut"
     >
       <SectionHeader
-        index="06"
         label="Experience"
         title={["Two internships,", "one company, real code."]}
         lede="Both at Core Integra. Written as what I built, what I improved, and what actually changed how I work."
