@@ -4,7 +4,6 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 
 import { MaskText } from "@/components/ui/MaskText";
-import { riseDelay } from "@/components/ui/Reveal";
 import { manifesto } from "@/data/story";
 
 /**
@@ -48,13 +47,6 @@ export function Manifesto() {
           />
         </div>
 
-        {/* Supporting body — deliberately small against the display type */}
-        <p
-          data-rise="up"
-          className="mx-auto mt-[clamp(2.5rem,7vh,5rem)] max-w-[52ch] text-lead leading-[1.6] text-ash"
-        >
-          {manifesto.body}
-        </p>
       </div>
 
       {/* FROM / TO — the concept, stated once, at scale */}
@@ -84,30 +76,6 @@ export function Manifesto() {
         </div>
       </div>
 
-      {/* The arc — idea → impact */}
-      <ol className="mt-[clamp(3rem,8vh,5.5rem)] flex flex-wrap items-center gap-x-5 gap-y-3 gut">
-        {manifesto.arc.map((step, i) => (
-          <li
-            key={step}
-            data-rise="up"
-            style={riseDelay(i)}
-            className="flex items-center gap-5"
-          >
-            <span className="label text-ash">
-              <span className="text-amber">
-                {String(i + 1).padStart(2, "0")}
-              </span>{" "}
-              {step}
-            </span>
-            {i < manifesto.arc.length - 1 ? (
-              <span
-                aria-hidden="true"
-                className="h-px w-8 bg-line-strong sm:w-12"
-              />
-            ) : null}
-          </li>
-        ))}
-      </ol>
     </section>
   );
 }

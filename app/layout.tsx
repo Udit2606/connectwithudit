@@ -6,7 +6,6 @@ import {
 } from "next/font/google";
 
 import { IntroProvider } from "@/components/chrome/Intro";
-import { Cursor } from "@/components/chrome/Cursor";
 import { THEME_BOOTSTRAP, ThemeProvider } from "@/components/chrome/Theme";
 import { RevealDriver } from "@/components/chrome/RevealDriver";
 import { Nav } from "@/components/chrome/Nav";
@@ -154,7 +153,6 @@ export default function RootLayout({
         </ThemeProvider>
 
         <RevealDriver />
-        <Cursor />
 
         <script
           type="application/ld+json"

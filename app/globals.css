@@ -356,26 +356,6 @@
   transform: translateY(0);
 }
 
-/* Hide the native cursor only where our custom one is active. */
-@media (hover: hover) and (pointer: fine) {
-  html[data-cursor="on"],
-  html[data-cursor="on"] * {
-    cursor: none;
-  }
-}
-
-/* Hero scroll cue — a mote falling down a hairline. */
-@keyframes scroll-cue {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(300%); }
-}
-
-/* Lab grid: nudge the middle column down for an uneven, less templated rhythm. */
-:root { --lab-offset: 0rem; }
-@media (min-width: 1024px) {
-  :root { --lab-offset: 3.5rem; }
-}
-
 /* ==========================================================================
    SCROLL REVEALS
    Opt in with data-rise="<variant>"; RevealDriver adds data-rise-in when the

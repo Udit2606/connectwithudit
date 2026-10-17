@@ -54,12 +54,6 @@ export function Footer() {
 
         {/* Colophon */}
         <div className="flex flex-col justify-between gap-6 lg:col-span-3 lg:col-start-10">
-          <div>
-            <span className="label mb-4 block text-dim">Built with</span>
-            <p className="label leading-[1.8] text-ash">
-              Next.js · TypeScript · Three.js · Lenis
-            </p>
-          </div>
           <p className="label text-faint">
             © {year} {site.name}. Designed and built from scratch.
           </p>

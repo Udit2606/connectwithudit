@@ -10,13 +10,8 @@ import { site } from "@/data/site";
 import { EASE_OUT_EXPO } from "@/lib/animations/variants";
 
 /**
- * The hero: wordmark on the left, the diorama clear of it on the right.
- *
- * An earlier version split the wordmark across two layers so the 3D object
- * passed between "Udit" and "Mittal". It was a nice trick and the wrong call:
- * the surname spent most of its time half-occluded by a monitor. The name is
- * the one element that has to be unmistakable, so it gets its own column and
- * the visual gets the other.
+ * The hero: the name centred on the first screen, with the diorama faded
+ * back behind it so the name is always the first thing read.
  */
 export function Hero() {
   const { done } = useIntro();
@@ -75,114 +70,39 @@ export function Hero() {
     >
       <div aria-hidden="true" className="u-grid-frame opacity-40" />
 
-      {/* The diorama, behind the content and offset to the right */}
-      <div className="absolute inset-0 z-0">
+      {/* The diorama, behind the name and faded back so the name reads first */}
+      <div className="absolute inset-0 z-0 opacity-35">
         <HeroVisual progress={progress} ready={done} />
       </div>
 
-      {/* Content. Constrained to the left so it never sits over the visual. */}
-      <div className="relative z-20 flex min-h-[100svh] flex-col justify-between gap-10 pb-[clamp(1.5rem,4vh,2.5rem)] pt-[clamp(6rem,14vh,9.5rem)] gut">
-        <div className="flex flex-col gap-[clamp(1.75rem,4vh,2.75rem)]">
-          {/* Metadata rail */}
-          <motion.div
-            {...fade(0.22)}
-            className="flex flex-wrap items-center gap-x-4 gap-y-2"
-          >
-            {site.meta.education.map((item, i) => (
-              <span key={item} className="flex items-center gap-4">
-                <span className="label text-dim">{item}</span>
-                {i < site.meta.education.length - 1 ? (
-                  <span aria-hidden="true" className="h-px w-5 bg-line-strong" />
-                ) : null}
-              </span>
-            ))}
-          </motion.div>
-
-          {/* The wordmark — one layer, fully legible */}
-          <div className="relative w-fit lg:max-w-[46%]">
-            {/*
-              The translucency sits behind the name and nowhere else.
-              An earlier version was a column-wide gradient, which also
-              veiled the diorama — so this is masked down to a soft haze the
-              size of the two lines, feathering out well before it reaches
-              the scene. The mask is what keeps it from reading as a panel:
-              a hard-edged blurred rectangle behind type looks like a bug.
-            */}
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute -z-10 backdrop-blur-[7px]"
-              style={{
-                inset: "-14% -11%",
-                background:
-                  "radial-gradient(68% 58% at 38% 50%, color-mix(in srgb, var(--color-void) 78%, transparent) 0%, transparent 100%)",
-                maskImage:
-                  "radial-gradient(68% 58% at 38% 50%, #000 38%, transparent 100%)",
-                WebkitMaskImage:
-                  "radial-gradient(68% 58% at 38% 50%, #000 38%, transparent 100%)",
-              }}
-            />
-            <h1 className="display-serif relative select-none text-[clamp(3rem,10vw,10.5rem)] text-bone">
-              <span className="u-sr">
-                {site.name} — {site.role}
-              </span>
-              {line("Udit", 0.04)}
-              {line("Mittal", 0.13)}
-            </h1>
-          </div>
-        </div>
+      {/* Content, centred */}
+      <div className="relative z-20 flex min-h-[100svh] flex-col items-center justify-center gap-[clamp(1.75rem,4vh,2.75rem)] pb-[clamp(4rem,10vh,7rem)] pt-[clamp(6rem,14vh,9.5rem)] text-center gut">
+        <h1 className="display-serif relative select-none text-[clamp(3rem,10vw,10.5rem)] text-bone">
+          <span className="u-sr">
+            {site.name} — {site.role}
+          </span>
+          {line("Udit", 0.04)}
+          {line("Mittal", 0.13)}
+        </h1>
 
         {/* Statement + actions */}
-        <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
-          <motion.div {...fade(0.3)} className="space-y-7">
-            <p className="max-w-[32ch] text-lead leading-[1.45] text-bone">
-              Software engineer building{" "}
-              <em className="whitespace-nowrap font-serif text-[1.06em] italic text-amber">
-                AI-powered products
-              </em>{" "}
-              and cloud-native systems.
-            </p>
-            <div className="flex flex-wrap items-center gap-3">
-              <ArrowLink href="#work" variant="filled" cursorLabel="Explore">
-                Explore work
-              </ArrowLink>
-              <ArrowLink href="#contact" variant="outline">
-                Let&rsquo;s connect
-              </ArrowLink>
-            </div>
-          </motion.div>
-
-          <motion.div
-            {...fade(0.42)}
-            className="flex items-end justify-between gap-8 lg:flex-col lg:items-end lg:gap-6"
-          >
-            <div className="flex items-center gap-2.5">
-              {site.positioning.slice(0, 3).map((word, i) => (
-                <span key={word} className="flex items-center gap-2.5">
-                  <span className="label text-ash">{word}</span>
-                  {i < 2 ? (
-                    <span aria-hidden="true" className="text-amber/60">
-                      /
-                    </span>
-                  ) : null}
-                </span>
-              ))}
-            </div>
-
-            <a
-              href="#manifesto"
-              data-cursor-expand
-              className="group flex items-center gap-3 text-dim transition-colors hover:text-bone"
-            >
-              <span className="label">Scroll</span>
-              <span
-                aria-hidden="true"
-                className="relative h-8 w-px overflow-hidden bg-line-strong"
-              >
-                <span className="absolute inset-x-0 top-0 h-3 animate-[scroll-cue_2s_var(--ease-swift)_infinite] bg-amber" />
-              </span>
-            </a>
-          </motion.div>
-        </div>
+        <motion.div {...fade(0.3)} className="flex flex-col items-center gap-7">
+          <p className="max-w-[32ch] text-lead leading-[1.45] text-bone">
+            Software engineer building{" "}
+            <em className="whitespace-nowrap font-serif text-[1.06em] italic text-amber">
+              AI-powered products
+            </em>{" "}
+            and cloud-native systems.
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <ArrowLink href="#work" variant="filled" cursorLabel="Explore">
+              Explore work
+            </ArrowLink>
+            <ArrowLink href="#contact" variant="outline">
+              Let&rsquo;s connect
+            </ArrowLink>
+          </div>
+        </motion.div>
       </div>
 
       {/* Dissolve into the next section */}
