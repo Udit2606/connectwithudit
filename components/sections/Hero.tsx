@@ -133,7 +133,7 @@ function DarkSky() {
           />
         </mask>
       </defs>
-      <g mask="url(#sky-mask-dark)">
+      <g mask="url(#sky-mask-dark)" className="hero-sky-pocket">
         <g filter="url(#sky-blur-dark)">
           <path
             d="M-80 340 C260 360 520 560 720 670 C920 560 1180 360 1520 340 L1520 980 L-80 980 Z"
