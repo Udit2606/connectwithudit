@@ -30,12 +30,14 @@ const SESSION_KEY = "um:intro";
  * on screen before it hydrates, so without this the homepage would flash up
  * for a moment first. When the prologue is going to play — front door, not
  * yet seen this session, motion allowed — this marks the document so CSS can
- * hold it dark until the overlay takes over. It clears itself after a few
- * seconds regardless, so a script failure can never leave the page black.
+ * hold it dark until the overlay takes over. It gives up after a few seconds
+ * regardless, so a script failure can never leave the page black; the mark
+ * then reads "expired", and the prologue is skipped rather than blacking out
+ * a page the visitor has already been looking at.
  */
 export const ARRIVAL_BOOTSTRAP = `(function(){try{if(location.pathname!=="/")return;if(sessionStorage.getItem(${JSON.stringify(
   SESSION_KEY,
-)})==="1")return;if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;var d=document.documentElement;d.setAttribute("data-arrival","pending");setTimeout(function(){d.removeAttribute("data-arrival")},6000)}catch(e){}})()`;
+)})==="1")return;if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;var d=document.documentElement;d.setAttribute("data-arrival","pending");setTimeout(function(){if(d.getAttribute("data-arrival")==="pending")d.setAttribute("data-arrival","expired")},6000)}catch(e){}})()`;
 
 /**
  * The arrival: a blank dark screen, then one message pops in the way a new
@@ -82,11 +84,16 @@ export function IntroProvider({ children }: { children: ReactNode }) {
      */
     const atFrontDoor = window.location.pathname === "/";
 
-    // Already arrived this session, deep-linked in, or motion is switched
-    // off: go straight in.
-    if (seen || reduced || !atFrontDoor) {
+    // The pre-paint cover ran out before the page could hydrate (a slow
+    // connection), so the page is already on screen.
+    const expired =
+      document.documentElement.getAttribute("data-arrival") === "expired";
+
+    // Already arrived this session, deep-linked in, motion is switched off,
+    // or the page has been showing for a while: go straight in.
+    if (seen || reduced || expired || !atFrontDoor) {
       setPhase("done");
-      if (!atFrontDoor) {
+      if (!atFrontDoor || expired) {
         try {
           sessionStorage.setItem(SESSION_KEY, "1");
         } catch {
@@ -114,9 +121,14 @@ export function IntroProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (phase === "done") start();
-    // The pre-paint cover hands over once the overlay is on screen, or once
-    // it is clear there will not be one.
-    if (phase !== "idle") document.documentElement.removeAttribute("data-arrival");
+    // The pre-paint cover hands over only once the overlay is on screen.
+    // `reduced` starts out pessimistic, so the phase can read "done" for one
+    // render before it becomes "running"; lifting the cover then would flash
+    // the page between two black screens. When there is no prologue the
+    // bootstrap never set the cover, or it has already expired.
+    if (phase === "running") {
+      document.documentElement.removeAttribute("data-arrival");
+    }
   }, [phase, start]);
 
   // Any deliberate input skips ahead. Nobody should be trapped in a prologue.
@@ -167,7 +179,7 @@ export function IntroProvider({ children }: { children: ReactNode }) {
             {popped ? (
               <motion.p
                 aria-hidden="true"
-                className="imsg text-[clamp(1.375rem,2.8vw,2.125rem)]"
+                className="imsg text-[clamp(1.5rem,2.8vw,2.125rem)]"
                 style={{ transformOrigin: "100% 100%" }}
                 initial={{ opacity: 0, scale: 0.4, y: 18 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
