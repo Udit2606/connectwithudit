@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
     removeConsole: process.env.NODE_ENV === "production" ? { exclude: ["error"] } : false,
   },
   experimental: {
-    optimizePackageImports: ["framer-motion", "@react-three/drei"],
+    optimizePackageImports: ["framer-motion"],
   },
 };
 

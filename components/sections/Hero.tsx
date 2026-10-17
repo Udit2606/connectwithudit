@@ -1,46 +1,22 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useEffect, useRef } from "react";
 
 import { useIntro } from "@/components/chrome/Intro";
-import { HeroVisual } from "@/components/three/HeroVisual";
 import { ArrowLink } from "@/components/ui/ArrowLink";
 import { site } from "@/data/site";
 import { EASE_OUT_EXPO } from "@/lib/animations/variants";
 
 /**
- * The hero: wordmark on the left, the diorama clear of it on the right.
+ * The hero: the name, set large across the centre of the stage, with one
+ * line about the work and two ways in beneath it.
  *
- * An earlier version split the wordmark across two layers so the 3D object
- * passed between "Udit" and "Mittal". It was a nice trick and the wrong call:
- * the surname spent most of its time half-occluded by a monitor. The name is
- * the one element that has to be unmistakable, so it gets its own column and
- * the visual gets the other.
+ * Nothing competes with the name. It is the one element on the first screen
+ * that has to be unmistakable, so it takes the middle of the room and the
+ * light falls on it from above.
  */
 export function Hero() {
   const { done } = useIntro();
-  const sectionRef = useRef<HTMLElement>(null);
-  /** 0 → 1 across the hero's own height; read by the 3D scene each frame. */
-  const progress = useRef(0);
-
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-
-    const onScroll = () => {
-      const h = el.offsetHeight || window.innerHeight;
-      progress.current = Math.min(Math.max(window.scrollY / h, 0), 1);
-    };
-
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
-  }, []);
 
   /**
    * Entrance offsets are kept tight on purpose. These run after the intro
@@ -68,7 +44,6 @@ export function Hero() {
 
   return (
     <section
-      ref={sectionRef}
       id="hero"
       aria-label="Introduction"
       className="hero-stage relative isolate min-h-[100svh] overflow-hidden"
@@ -77,67 +52,39 @@ export function Hero() {
       <div aria-hidden="true" className="hero-glow -z-10" />
       <div aria-hidden="true" className="u-grid-frame opacity-40" />
 
-      {/* The diorama, behind the content and offset to the right */}
-      <div className="absolute inset-0 z-0">
-        <HeroVisual progress={progress} ready={done} />
-      </div>
-
-      {/* Content. Constrained to the left so it never sits over the visual. */}
-      <div className="relative z-20 flex min-h-[100svh] flex-col justify-between gap-10 pb-[clamp(1.5rem,4vh,2.5rem)] pt-[clamp(6rem,14vh,9.5rem)] gut">
-        <div className="flex flex-col gap-[clamp(1.75rem,4vh,2.75rem)]">
-          {/* The wordmark — one layer, fully legible */}
-          <div className="relative w-fit lg:max-w-[46%]">
-            {/*
-              The translucency sits behind the name and nowhere else.
-              An earlier version was a column-wide gradient, which also
-              veiled the diorama — so this is masked down to a soft haze the
-              size of the two lines, feathering out well before it reaches
-              the scene. The mask is what keeps it from reading as a panel:
-              a hard-edged blurred rectangle behind type looks like a bug.
-            */}
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute -z-10 backdrop-blur-[7px]"
-              style={{
-                inset: "-14% -11%",
-                background:
-                  "radial-gradient(68% 58% at 38% 50%, color-mix(in srgb, var(--color-void) 78%, transparent) 0%, transparent 100%)",
-                maskImage:
-                  "radial-gradient(68% 58% at 38% 50%, #000 38%, transparent 100%)",
-                WebkitMaskImage:
-                  "radial-gradient(68% 58% at 38% 50%, #000 38%, transparent 100%)",
-              }}
-            />
-            <h1 className="relative select-none font-hero text-[clamp(3rem,8.6vw,9.25rem)] font-extralight uppercase leading-[0.92] tracking-[0.06em] text-bone">
-              <span className="u-sr">
-                {site.name} — {site.role}
-              </span>
-              {line("Udit", 0.04)}
-              {line("Mittal", 0.13)}
-            </h1>
-          </div>
-        </div>
+      {/* Content, centred on the stage. */}
+      <div className="relative z-20 flex min-h-[100svh] flex-col items-center justify-center pb-[clamp(4rem,10vh,7rem)] pt-[clamp(6rem,14vh,9.5rem)] text-center gut">
+        {/* The wordmark. The tracking is balanced with an equal indent so the
+            letters, not the trailing space after the last one, sit centred. */}
+        <h1 className="select-none pl-[0.08em] font-hero text-[19vw] font-extralight sm:text-[clamp(3.5rem,12vw,13rem)] uppercase leading-[0.92] tracking-[0.08em] text-bone [text-shadow:0_2px_40px_rgb(0_0_0/0.35)]">
+          <span className="u-sr">
+            {site.name} — {site.role}
+          </span>
+          {line("Udit", 0.04)}
+          {line("Mittal", 0.13)}
+        </h1>
 
         {/* Statement + actions */}
-        <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
-          <motion.div {...fade(0.3)} className="space-y-7">
-            <p className="max-w-[32ch] text-lead leading-[1.45] text-bone">
-              Software engineer building{" "}
-              <em className="whitespace-nowrap font-serif text-[1.06em] italic text-amber">
-                AI-powered products
-              </em>{" "}
-              and cloud-native systems.
-            </p>
-            <div className="flex flex-wrap items-center gap-3">
-              <ArrowLink href="#work" variant="filled" cursorLabel="Explore">
-                Explore work
-              </ArrowLink>
-              <ArrowLink href="#contact" variant="outline">
-                Let&rsquo;s connect
-              </ArrowLink>
-            </div>
-          </motion.div>
-        </div>
+        <motion.div
+          {...fade(0.3)}
+          className="mt-[clamp(1.75rem,4vh,2.75rem)] flex flex-col items-center gap-7"
+        >
+          <p className="max-w-[40ch] text-lead leading-[1.45] text-bone">
+            Software engineer building{" "}
+            <em className="whitespace-nowrap font-serif text-[1.06em] italic text-amber">
+              AI-powered products
+            </em>{" "}
+            and cloud-native systems.
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <ArrowLink href="#work" variant="filled" cursorLabel="Explore">
+              Explore work
+            </ArrowLink>
+            <ArrowLink href="#contact" variant="outline">
+              Let&rsquo;s connect
+            </ArrowLink>
+          </div>
+        </motion.div>
       </div>
 
       {/* Dissolve into the next section */}
