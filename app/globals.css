@@ -593,3 +593,18 @@
   0%, 49% { opacity: 1; }
   50%, 100% { opacity: 0; }
 }
+
+/* Hero matte finish: a flat tint and fine grain over the 3D scene, with its
+   colour slightly muted, so it reads as a matte surface behind the name.
+   No backdrop blur: re-blurring a live WebGL canvas every frame is costly. */
+.hero-matte {
+  background-color: color-mix(in srgb, var(--color-void) 14%, transparent);
+}
+.hero-matte::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.09;
+  background-image: var(--grain-url);
+  background-size: 180px 180px;
+}

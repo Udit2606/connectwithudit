@@ -71,9 +71,15 @@ export function Hero() {
       <div aria-hidden="true" className="u-grid-frame opacity-40" />
 
       {/* The diorama, behind the name and faded back so the name reads first */}
-      <div className="absolute inset-0 z-0 opacity-35">
+      <div className="absolute inset-0 z-0 opacity-35 saturate-[0.8]">
         <HeroVisual progress={progress} ready={done} />
       </div>
+
+      {/* A matte finish over the diorama (see .hero-matte) */}
+      <div
+        aria-hidden="true"
+        className="hero-matte pointer-events-none absolute inset-0 z-10"
+      />
 
       {/* Content, centred */}
       <div className="relative z-20 flex min-h-[100svh] flex-col items-center justify-center gap-[clamp(1.75rem,4vh,2.75rem)] pb-[clamp(4rem,10vh,7rem)] pt-[clamp(6rem,14vh,9.5rem)] text-center gut">
@@ -87,7 +93,7 @@ export function Hero() {
 
         {/* Statement + actions */}
         <motion.div {...fade(0.3)} className="flex flex-col items-center gap-7">
-          <p className="max-w-[32ch] text-lead leading-[1.45] text-bone">
+          <p className="max-w-[40ch] text-lead leading-[1.45] text-bone">
             Software engineer building{" "}
             <em className="whitespace-nowrap font-serif text-[1.06em] italic text-amber">
               AI-powered products
