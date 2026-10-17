@@ -31,8 +31,8 @@
   --font-sans: var(--font-sans-family), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-serif-family), ui-serif, Georgia, serif;
   --font-mono: var(--font-mono-family), ui-monospace, monospace;
-  /* The hero wordmark: a thin, open grotesk set in tracked capitals. */
-  --font-hero: var(--font-hero-family), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* The hero wordmark: a wide, high-contrast display serif in capitals. */
+  --font-hero: var(--font-hero-family), Didot, "Bodoni 72", Georgia, serif;
 
   /* --- Fluid display scale --------------------------------------------- */
   --text-mono-xs: 0.625rem;

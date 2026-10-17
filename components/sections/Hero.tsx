@@ -56,7 +56,7 @@ export function Hero() {
       <div className="relative z-20 flex min-h-[100svh] flex-col items-center justify-center pb-[clamp(4rem,10vh,7rem)] pt-[clamp(6rem,14vh,9.5rem)] text-center gut">
         {/* The wordmark. The tracking is balanced with an equal indent so the
             letters, not the trailing space after the last one, sit centred. */}
-        <h1 className="select-none pl-[0.08em] font-hero text-[19vw] font-extralight sm:text-[clamp(3.5rem,12vw,13rem)] uppercase leading-[0.92] tracking-[0.08em] text-bone [text-shadow:0_2px_40px_rgb(0_0_0/0.35)]">
+        <h1 className="select-none pl-[0.02em] font-hero text-[19vw] font-[350] sm:text-[clamp(3.5rem,12vw,13rem)] uppercase leading-[0.92] tracking-[0.02em] text-bone [text-shadow:0_2px_40px_rgb(0_0_0/0.35)]">
           <span className="u-sr">
             {site.name} — {site.role}
           </span>

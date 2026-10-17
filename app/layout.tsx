@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import {
   IBM_Plex_Mono,
   Instrument_Serif,
-  Inter,
+  Kalnia,
   Schibsted_Grotesk,
 } from "next/font/google";
 
@@ -50,15 +50,15 @@ const mono = IBM_Plex_Mono({
 });
 
 /**
- * Inter at its lightest weights, for the hero wordmark only: thin strokes,
- * open capitals and wide tracking, so the name reads as a title card rather
- * than a headline.
+ * Kalnia, for the hero wordmark only: wide, high-contrast capitals with fine
+ * flared serifs, so the name reads as a title rather than a headline. Loaded
+ * as the variable font so the weight can sit between the named stops.
  */
-const hero = Inter({
+const hero = Kalnia({
   subsets: ["latin"],
   variable: "--font-hero-family",
   display: "swap",
-  weight: ["200", "300"],
+  weight: "variable",
 });
 
 export const metadata: Metadata = {
