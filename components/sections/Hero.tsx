@@ -70,8 +70,8 @@ export function Hero() {
     >
       <div aria-hidden="true" className="u-grid-frame opacity-40" />
 
-      {/* The diorama, behind the name and faded back so the name reads first */}
-      <div className="absolute inset-0 z-0 opacity-35 saturate-[0.8]">
+      {/* The diorama, below the text and partly faded */}
+      <div className="absolute inset-0 z-0 opacity-60 saturate-[0.8]">
         <HeroVisual progress={progress} ready={done} />
       </div>
 
@@ -81,18 +81,18 @@ export function Hero() {
         className="hero-matte pointer-events-none absolute inset-0 z-10"
       />
 
-      {/* Content, centred */}
-      <div className="relative z-20 flex min-h-[100svh] flex-col items-center justify-center gap-[clamp(1.75rem,4vh,2.75rem)] pb-[clamp(4rem,10vh,7rem)] pt-[clamp(6rem,14vh,9.5rem)] text-center gut">
-        <h1 className="display-serif relative select-none text-[clamp(3rem,10vw,10.5rem)] text-bone">
+      {/* Content, centred and held high, so the screen on the desk below
+          ("What if I could build it?") stays in view. */}
+      <div className="relative z-20 flex min-h-[100svh] flex-col items-center justify-start gap-[clamp(1rem,2.5vh,1.75rem)] pb-[clamp(4rem,10vh,7rem)] pt-[clamp(6.5rem,13vh,8.5rem)] text-center gut">
+        <h1 className="display-serif relative select-none whitespace-nowrap text-[clamp(2.25rem,7.5vw,7.5rem)] uppercase tracking-[0.06em] text-bone">
           <span className="u-sr">
             {site.name} — {site.role}
           </span>
-          {line("Udit", 0.04)}
-          {line("Mittal", 0.13)}
+          {line("Udit Mittal", 0.04)}
         </h1>
 
         {/* Statement + actions */}
-        <motion.div {...fade(0.3)} className="flex flex-col items-center gap-7">
+        <motion.div {...fade(0.3)} className="flex flex-col items-center gap-5">
           <p className="max-w-[40ch] text-lead leading-[1.45] text-bone">
             Software engineer building{" "}
             <em className="whitespace-nowrap font-serif text-[1.06em] italic text-amber">

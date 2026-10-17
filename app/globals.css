@@ -600,6 +600,17 @@
 .hero-matte {
   background-color: color-mix(in srgb, var(--color-void) 14%, transparent);
 }
+/* In the dark, a deeper translucent veil gathers toward the edges and stays
+   clear over the desk, so the scene glows through the middle. */
+:root[data-theme="dark"] .hero-matte {
+  background:
+    radial-gradient(
+      62% 58% at 50% 56%,
+      transparent 0%,
+      color-mix(in srgb, var(--color-void) 55%, transparent) 100%
+    ),
+    color-mix(in srgb, var(--color-void) 10%, transparent);
+}
 .hero-matte::after {
   content: "";
   position: absolute;
