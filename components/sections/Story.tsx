@@ -52,17 +52,6 @@ function Chapter({ chapter }: { chapter: (typeof story)[number] }) {
           {chapter.lede}
         </p>
       </div>
-
-      {/* Body — one paragraph, on purpose */}
-      <div className="md:col-span-5 lg:col-span-5 lg:col-start-8">
-        <p
-          data-rise="up"
-          style={riseDelay(0, 150)}
-          className="max-w-[42ch] text-[1.0625rem] leading-[1.6] text-ash"
-        >
-          {chapter.body}
-        </p>
-      </div>
     </article>
   );
 }

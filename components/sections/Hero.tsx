@@ -83,21 +83,6 @@ export function Hero() {
       {/* Content. Constrained to the left so it never sits over the visual. */}
       <div className="relative z-20 flex min-h-[100svh] flex-col justify-between gap-10 pb-[clamp(1.5rem,4vh,2.5rem)] pt-[clamp(6rem,14vh,9.5rem)] gut">
         <div className="flex flex-col gap-[clamp(1.75rem,4vh,2.75rem)]">
-          {/* Metadata rail */}
-          <motion.div
-            {...fade(0.22)}
-            className="flex flex-wrap items-center gap-x-4 gap-y-2"
-          >
-            {site.meta.education.map((item, i) => (
-              <span key={item} className="flex items-center gap-4">
-                <span className="label text-dim">{item}</span>
-                {i < site.meta.education.length - 1 ? (
-                  <span aria-hidden="true" className="h-px w-5 bg-line-strong" />
-                ) : null}
-              </span>
-            ))}
-          </motion.div>
-
           {/* The wordmark — one layer, fully legible */}
           <div className="relative w-fit lg:max-w-[46%]">
             {/*
@@ -132,8 +117,8 @@ export function Hero() {
         </div>
 
         {/* Statement + actions */}
-        <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
-          <motion.div {...fade(0.3)} className="space-y-7">
+        <div className="flex flex-col gap-10">
+          <motion.div {...fade(0.18)} className="space-y-7">
             <p className="max-w-[32ch] text-lead leading-[1.45] text-bone">
               Software engineer building{" "}
               <em className="whitespace-nowrap font-serif text-[1.06em] italic text-amber">
@@ -149,38 +134,6 @@ export function Hero() {
                 Let&rsquo;s connect
               </ArrowLink>
             </div>
-          </motion.div>
-
-          <motion.div
-            {...fade(0.42)}
-            className="flex items-end justify-between gap-8 lg:flex-col lg:items-end lg:gap-6"
-          >
-            <div className="flex items-center gap-2.5">
-              {site.positioning.slice(0, 3).map((word, i) => (
-                <span key={word} className="flex items-center gap-2.5">
-                  <span className="label text-ash">{word}</span>
-                  {i < 2 ? (
-                    <span aria-hidden="true" className="text-amber/60">
-                      /
-                    </span>
-                  ) : null}
-                </span>
-              ))}
-            </div>
-
-            <a
-              href="#manifesto"
-              data-cursor-expand
-              className="group flex items-center gap-3 text-dim transition-colors hover:text-bone"
-            >
-              <span className="label">Scroll</span>
-              <span
-                aria-hidden="true"
-                className="relative h-8 w-px overflow-hidden bg-line-strong"
-              >
-                <span className="absolute inset-x-0 top-0 h-3 animate-[scroll-cue_2s_var(--ease-swift)_infinite] bg-amber" />
-              </span>
-            </a>
           </motion.div>
         </div>
       </div>
