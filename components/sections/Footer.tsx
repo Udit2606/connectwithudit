@@ -5,6 +5,7 @@ import { useSmoothScroll } from "@/components/chrome/SmoothScroll";
 
 export function Footer() {
   const { scrollTo } = useSmoothScroll();
+  const year = 2026;
 
   return (
     <footer className="relative border-t border-line py-10 gut">
@@ -44,6 +45,14 @@ export function Footer() {
             ))}
           </ul>
         </nav>
+      </div>
+
+      {/* Rights, on its own rule under the grid. A single line, which is all
+          a notice needs — the colophon that used to sit beside it is gone. */}
+      <div className="mt-10 border-t border-line pt-6">
+        <p className="label text-faint">
+          © {year} {site.name}. All rights reserved.
+        </p>
       </div>
     </footer>
   );

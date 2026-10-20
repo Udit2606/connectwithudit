@@ -145,12 +145,6 @@ export function Contact() {
                 </span>
               </dd>
             </div>
-            <div className="col-span-2">
-              <dt className="label text-dim">Looking for</dt>
-              <dd className="mt-2 max-w-[30ch] font-sans text-[0.9375rem] leading-[1.5] text-ash">
-                Full-stack and backend roles where the hard part is the system.
-              </dd>
-            </div>
           </dl>
         </div>
       </div>
