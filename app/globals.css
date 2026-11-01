@@ -614,10 +614,24 @@
    specificity, so it won the cascade and left the word permanently
    blurred — the very fault this rule exists to fix. */
 [data-scene="before"][data-fine] {
-  filter: blur(11px);
+  filter: blur(8px);
 }
 [data-scene="after"][data-fine] {
-  filter: blur(9px);
+  filter: blur(8px);
+}
+
+/* And it comes into focus well before it finishes moving. A matra only
+   emerges in the last moments of a blur — the consonants are legible at
+   6px while the marks above the line are not — so on this scene the focus
+   resolves in roughly half the time the rest of the move takes, and the
+   whole word sharpens together instead of the marks arriving a beat late.
+   The selector carries both attributes so it outranks the base transition
+   without touching the `filter: none` that [data-scene="present"] sets. */
+[data-scene="present"][data-fine] {
+  transition:
+    opacity 1150ms var(--ease-scene),
+    filter 560ms cubic-bezier(0.22, 0.75, 0.3, 1),
+    transform 1150ms var(--ease-scene);
 }
 
 /* Leaving continues the arrival's direction rather than reversing it. */

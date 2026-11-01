@@ -44,6 +44,10 @@ export function IntroProvider({ children }: { children: ReactNode }) {
   const { stop, start } = useSmoothScroll();
   const [phase, setPhase] = useState<"idle" | "running" | "done">("idle");
   const [scene, setScene] = useState(0);
+  /* Every scene must be painted in its `before` pose once before the first
+     one is made present, or there is no state change for the transition to
+     run from and the opening word simply appears. */
+  const [started, setStarted] = useState(false);
   /* "leaving" keeps the overlay mounted through its own transition; the
      site is already interactive underneath by then. */
   const [leaving, setLeaving] = useState(false);
@@ -89,6 +93,11 @@ export function IntroProvider({ children }: { children: ReactNode }) {
     window.scrollTo(0, 0);
     stop();
 
+    // One paint in the entry pose, then begin. A timeout rather than
+    // requestAnimationFrame: rAF is throttled when the tab is not visible,
+    // which would hold the whole sequence at its first frame.
+    timers.current.push(setTimeout(() => setStarted(true), 60));
+
     scenes.forEach((s, i) => {
       if (i === 0) return;
       timers.current.push(setTimeout(() => setScene(i), s.at));
@@ -125,7 +134,7 @@ export function IntroProvider({ children }: { children: ReactNode }) {
 
   const running = phase === "running";
   const poseOf = (i: number): Pose =>
-    scene === i ? "present" : scene > i ? "after" : "before";
+    !started ? "before" : scene === i ? "present" : scene > i ? "after" : "before";
 
   return (
     <IntroContext.Provider value={{ done: phase === "done" }}>
