@@ -29,16 +29,21 @@ export type Pose = "before" | "present" | "after";
 
 export function Scene({
   pose,
+  fine,
   children,
   className,
 }: {
   pose: Pose;
+  /** Set for scripts with fine detail above the line — they get a
+      shallower blur, because matras vanish long before Latin letters do. */
+  fine?: boolean;
   children: ReactNode;
   className?: string;
 }) {
   return (
     <div
       data-scene={pose}
+      data-fine={fine ? "" : undefined}
       className={className}
       // Not the current scene: cannot be clicked, and is not read out —
       // the document says all of this again in the hero.

@@ -605,6 +605,21 @@
   transform: none;
 }
 
+/* Scripts that carry fine detail above the line — Devanagari matras and the
+   shirorekha — lose that detail long before a Latin word does, so they get a
+   shallower blur. The move is identical; only the depth of focus changes.
+
+   Both poses are named explicitly rather than written as a bare
+   [data-fine]. That shorthand sits after [data-scene="present"] at equal
+   specificity, so it won the cascade and left the word permanently
+   blurred — the very fault this rule exists to fix. */
+[data-scene="before"][data-fine] {
+  filter: blur(11px);
+}
+[data-scene="after"][data-fine] {
+  filter: blur(9px);
+}
+
 /* Leaving continues the arrival's direction rather than reversing it. */
 [data-scene="after"] {
   opacity: 0;

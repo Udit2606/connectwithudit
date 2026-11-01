@@ -147,7 +147,7 @@ export function IntroProvider({ children }: { children: ReactNode }) {
               </p>
             </Scene>
 
-            <Scene pose={poseOf(1)}>
+            <Scene pose={poseOf(1)} fine>
               <p className="font-deva text-[clamp(3.25rem,12vw,9rem)] leading-[1.25] text-bone">
                 {overture.namaste}
               </p>
