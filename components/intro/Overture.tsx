@@ -14,8 +14,7 @@ import { useSmoothScroll } from "@/components/chrome/SmoothScroll";
 import { EXIT_AT, HAND_OVER_MS, overture, scenes } from "@/data/overture";
 import { usePrefersReducedMotion } from "@/lib/hooks/usePrefersReducedMotion";
 import { Diffusion } from "./Diffusion";
-import { Scene, SceneLine, type Pose } from "./Scene";
-import { ScrollCue } from "./ScrollCue";
+import { Scene, type Pose } from "./Scene";
 
 const IntroContext = createContext<{ done: boolean }>({ done: true });
 
@@ -149,34 +148,9 @@ export function IntroProvider({ children }: { children: ReactNode }) {
             </Scene>
 
             <Scene pose={poseOf(1)}>
-              <div className="flex flex-col items-center gap-[clamp(0.75rem,2vh,1.5rem)]">
-                <p className="font-deva text-[clamp(3rem,11vw,8.5rem)] font-light leading-[1.2] text-bone">
-                  {overture.namasteDeva}
-                </p>
-                <p className="display-serif text-[clamp(1.75rem,5vw,3.5rem)] text-ash">
-                  {overture.namasteLatin}
-                </p>
-              </div>
-            </Scene>
-
-            <Scene pose={poseOf(2)}>
-              <div className="flex flex-col items-center gap-[clamp(1.25rem,4vh,2.5rem)]">
-                <p className="display-serif text-[clamp(2.5rem,9vw,7rem)] text-bone">
-                  {overture.name}
-                </p>
-                <SceneLine show={scene === 2} delay={300}>
-                  <p className="max-w-[26ch] text-lead leading-[1.5] text-ash">
-                    {overture.line}
-                  </p>
-                </SceneLine>
-                <SceneLine
-                  show={scene === 2}
-                  delay={750}
-                  className="mt-[clamp(0.5rem,3vh,2rem)]"
-                >
-                  <ScrollCue />
-                </SceneLine>
-              </div>
+              <p className="font-deva text-[clamp(3.25rem,12vw,9rem)] font-light leading-[1.2] text-bone">
+                {overture.namaste}
+              </p>
             </Scene>
           </div>
 

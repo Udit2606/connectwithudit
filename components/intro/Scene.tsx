@@ -48,29 +48,3 @@ export function Scene({
     </div>
   );
 }
-
-/**
- * A line inside a scene that arrives after the scene itself, where a scene
- * has a hierarchy — a name, then what the name does.
- */
-export function SceneLine({
-  show,
-  delay = 0,
-  children,
-  className,
-}: {
-  show: boolean;
-  delay?: number;
-  children: ReactNode;
-  className?: string;
-}) {
-  return (
-    <div
-      data-scene-line={show ? "in" : "out"}
-      style={{ transitionDelay: show ? `${delay}ms` : "0ms" }}
-      className={className}
-    >
-      {children}
-    </div>
-  );
-}
