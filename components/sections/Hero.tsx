@@ -1,9 +1,9 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { useEffect, useRef } from "react";
 
-import { useIntro } from "@/components/chrome/Intro";
+import { useIntro } from "@/components/intro/Overture";
 import { HeroVisual } from "@/components/three/HeroVisual";
 import { ArrowLink } from "@/components/ui/ArrowLink";
 import { site } from "@/data/site";

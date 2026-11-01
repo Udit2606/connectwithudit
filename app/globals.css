@@ -31,6 +31,7 @@
   --font-sans: var(--font-sans-family), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-serif-family), ui-serif, Georgia, serif;
   --font-mono: var(--font-mono-family), ui-monospace, monospace;
+  --font-deva: var(--font-deva-family), "Noto Serif Devanagari", serif;
 
   /* --- Fluid display scale --------------------------------------------- */
   --text-mono-xs: 0.625rem;
@@ -461,41 +462,6 @@
 }
 
 /* ==========================================================================
-   ARRIVAL STAGE
-   While the intro plays, the site sits behind it out of focus. The blur is
-   applied to a wrapper rather than withheld content, so the hero still
-   paints on schedule and the prologue costs nothing in LCP.
-   ========================================================================== */
-
-[data-stage] {
-  /* Transition back to 0 rather than to `none`, which is not animatable.
-     The attribute is dropped afterwards so no compositing layer lingers. */
-  transition:
-    filter 1200ms var(--ease-in-out-quint),
-    transform 1800ms var(--ease-in-out-quint),
-    opacity 1200ms var(--ease-in-out-quint);
-}
-
-[data-stage="blurred"] {
-  filter: blur(18px) brightness(0.5) saturate(0.85);
-  transform: scale(1.04);
-  opacity: 0.9;
-  /* Nothing behind the prologue should be clickable or tabbable-looking. */
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  [data-stage],
-  [data-stage="blurred"] {
-    filter: none !important;
-    transform: none !important;
-    opacity: 1 !important;
-    transition: none !important;
-    pointer-events: auto !important;
-  }
-}
-
-/* ==========================================================================
    LIGHT MODE
    The dark substrate is the art direction; light is a second, equally
    authored substrate rather than an inversion. Every token keeps its *role*
@@ -518,7 +484,6 @@
   --grain-blend: normal;
   --bloom-color: rgb(255 154 60 / 0.3);
   --scrollbar-thumb: #26262c;
-  --stage-brightness: 0.5;
 }
 
 /* Light is the default, so this has to match an absent attribute too: the
@@ -554,8 +519,6 @@
   --grain-blend: multiply;
   --bloom-color: rgb(176 76 6 / 0.14);
   --scrollbar-thumb: #cdc7bb;
-  /* Dimming a light page means brightening it, not darkening it. */
-  --stage-brightness: 1.08;
 }
 
 .u-grain::after {
@@ -574,10 +537,6 @@
 }
 * {
   scrollbar-color: var(--scrollbar-thumb) var(--color-void);
-}
-
-[data-stage="blurred"] {
-  filter: blur(18px) brightness(var(--stage-brightness)) saturate(0.85);
 }
 
 /* --- The flip itself ------------------------------------------------------
@@ -599,9 +558,92 @@
   }
 }
 
-/* The arrival caret. Steps, not a fade: a caret does not dim, it is on or
-   off, and the whole line is a typewriter conceit. */
-@keyframes caret-blink {
-  0%, 49% { opacity: 1; }
-  50%, 100% { opacity: 0; }
+/* ==========================================================================
+   OVERTURE
+   The opening sequence's scene poses. These live in CSS rather than in the
+   animation library on purpose: the sequence advances on timers, and
+   library animations stepped from requestAnimationFrame arrive a beat late
+   when the main thread is busy — every scene was landing as it should have
+   been leaving. A compositor-driven transition cannot fall behind the state
+   that set it. opacity, filter and transform are also the three properties
+   that composite without touching layout, so the whole piece runs off the
+   main thread.
+   Note the 0.01px blurs below. The CSS minifier rewrites `blur(0px)` to
+   `blur()`, which is invalid, so the whole `filter` declaration is dropped
+   from the compiled stylesheet and a scene never comes into focus. A value
+   it will not strip costs nothing and is indistinguishable at this scale.
+   ========================================================================== */
+
+:root {
+  /* Slight overshoot on arrival: the trace of a spring, without the cost of
+     simulating one sixty times a second. */
+  --ease-scene: cubic-bezier(0.2, 1.12, 0.34, 1);
+}
+
+[data-scene] {
+  grid-area: 1 / 1;
+  pointer-events: none;
+  opacity: 0;
+  filter: blur(22px);
+  transform: translate3d(0, 20px, 0) scale(1.045);
+  transition:
+    opacity 1150ms var(--ease-scene),
+    filter 1150ms var(--ease-scene),
+    transform 1150ms var(--ease-scene);
+}
+
+[data-scene="present"] {
+  pointer-events: auto;
+  opacity: 1;
+  filter: blur(0.01px);
+  transform: none;
+}
+
+/* Leaving continues the arrival's direction rather than reversing it. */
+[data-scene="after"] {
+  opacity: 0;
+  filter: blur(16px);
+  transform: translate3d(0, -24px, 0) scale(0.985);
+  transition-duration: 900ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-overture] {
+  opacity: 1;
+  transform: none;
+  filter: blur(0.01px);
+  transition:
+    opacity 1100ms cubic-bezier(0.83, 0, 0.17, 1),
+    filter 1100ms cubic-bezier(0.83, 0, 0.17, 1),
+    transform 1100ms cubic-bezier(0.83, 0, 0.17, 1);
+}
+/* Handing over: the overture lets go toward the viewer as the site arrives. */
+[data-overture="leaving"] {
+  opacity: 0;
+  filter: blur(8px);
+  transform: scale(1.03);
+  pointer-events: none;
+}
+
+[data-scene-line] {
+  opacity: 0;
+  filter: blur(12px);
+  transform: translate3d(0, 16px, 0);
+  transition:
+    opacity 900ms var(--ease-scene),
+    filter 900ms var(--ease-scene),
+    transform 900ms var(--ease-scene);
+}
+[data-scene-line="in"] {
+  opacity: 1;
+  filter: blur(0.01px);
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-scene],
+  [data-scene-line],
+  [data-overture] {
+    transition: none !important;
+  }
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion } from "motion/react";
 import { useId, useState } from "react";
 
 import type { FlowKind, FlowNode } from "@/data/projects";

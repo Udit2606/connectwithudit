@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { useEffect, useMemo, useState } from "react";
 
 import { EASE_IN_OUT_QUINT } from "@/lib/animations/variants";

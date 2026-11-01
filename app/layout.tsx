@@ -2,10 +2,11 @@ import type { Metadata, Viewport } from "next";
 import {
   IBM_Plex_Mono,
   Instrument_Serif,
+  Noto_Serif_Devanagari,
   Schibsted_Grotesk,
 } from "next/font/google";
 
-import { IntroProvider } from "@/components/chrome/Intro";
+import { IntroProvider } from "@/components/intro/Overture";
 import { THEME_BOOTSTRAP, ThemeProvider } from "@/components/chrome/Theme";
 import { RevealDriver } from "@/components/chrome/RevealDriver";
 import { Nav } from "@/components/chrome/Nav";
@@ -45,6 +46,18 @@ const mono = IBM_Plex_Mono({
   variable: "--font-mono-family",
   display: "swap",
   weight: ["400", "500"],
+});
+
+/**
+ * Devanagari for the overture's नमस्ते. A serif companion rather than a sans,
+ * so it sits with Instrument Serif instead of against it — the two scripts
+ * are the same greeting and should look like they agree.
+ */
+const deva = Noto_Serif_Devanagari({
+  subsets: ["devanagari"],
+  variable: "--font-deva-family",
+  display: "swap",
+  weight: ["300", "400"],
 });
 
 export const metadata: Metadata = {
@@ -122,7 +135,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${sans.variable} ${serif.variable} ${mono.variable}`}
+      className={`${sans.variable} ${serif.variable} ${mono.variable} ${deva.variable}`}
       /* The theme bootstrap puts data-theme here before React hydrates, so
          the server markup and the live document legitimately differ by one
          attribute. Suppressing the warning is the supported way to say so;
