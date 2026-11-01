@@ -57,7 +57,10 @@ const deva = Noto_Serif_Devanagari({
   subsets: ["devanagari"],
   variable: "--font-deva-family",
   display: "swap",
-  weight: ["300", "400"],
+  /* 400, not 300. Devanagari matras are far finer than the consonants they
+     sit on, and at 300 they smear while the scene is blurred — the marks
+     appear to arrive a beat behind the letters. */
+  weight: ["400"],
 });
 
 export const metadata: Metadata = {

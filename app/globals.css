@@ -568,6 +568,11 @@
    that set it. opacity, filter and transform are also the three properties
    that composite without touching layout, so the whole piece runs off the
    main thread.
+   The scale deltas here are deliberately tiny. Scaling text while it is
+   blurred makes the compositor stretch a cached raster, and scripts with
+   fine marks above the line — Devanagari matras especially — smear and
+   appear to lag behind the letters they belong to.
+
    A scene at rest has `filter: none`, never `blur(0px)`. Two reasons: the
    CSS minifier rewrites `blur(0px)` to the invalid `blur()` and drops the
    whole declaration, and any filter at all — even a hundredth of a pixel —
@@ -585,8 +590,8 @@
   grid-area: 1 / 1;
   pointer-events: none;
   opacity: 0;
-  filter: blur(22px);
-  transform: translate3d(0, 20px, 0) scale(1.045);
+  filter: blur(18px);
+  transform: translate3d(0, 20px, 0) scale(1.014);
   transition:
     opacity 1150ms var(--ease-scene),
     filter 1150ms var(--ease-scene),
@@ -604,7 +609,7 @@
 [data-scene="after"] {
   opacity: 0;
   filter: blur(16px);
-  transform: translate3d(0, -24px, 0) scale(0.985);
+  transform: translate3d(0, -24px, 0) scale(0.994);
   transition-duration: 900ms;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
